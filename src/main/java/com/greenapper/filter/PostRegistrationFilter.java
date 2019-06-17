@@ -1,6 +1,7 @@
 package com.greenapper.filter;
 
 import com.greenapper.controllers.CampaignManagerController;
+import com.greenapper.controllers.CampaignManagerProfileController;
 import com.greenapper.models.CampaignManager;
 import com.greenapper.models.CampaignManagerProfile;
 import com.greenapper.models.User;
@@ -51,7 +52,7 @@ public class PostRegistrationFilter implements Filter {
 
 		final CampaignManagerProfile sessionProfile = sessionCampaignManager.getCampaignManagerProfile();
 		if (sessionProfile == null || sessionProfile.getName() == null || sessionProfile.getEmail() == null)
-			return CampaignManagerController.PROFILE_UPDATE_URI;
+			return CampaignManagerProfileController.PROFILE_UPDATE_URI;
 		return null;
 	}
 }
