@@ -34,12 +34,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	public PasswordEncoder getPasswordEncoder() {
 		return new SCryptPasswordEncoder((int) Math.pow(2, 14), 8, 8, 64, 64);
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
 	}
 }

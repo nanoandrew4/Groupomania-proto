@@ -3,27 +3,32 @@ package com.greenapper.services.impl;
 import com.greenapper.config.SecurityConfig;
 import com.greenapper.models.Campaign;
 import com.greenapper.models.CampaignManager;
+import com.greenapper.models.PasswordUpdate;
 import com.greenapper.repositories.CampaignManagerRepository;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
+import javax.annotation.Resource;
 import java.util.Optional;
 
 @Service
 public class DefaultCampaignManagerService implements CampaignManagerService {
 
 	@Autowired
-	private CampaignManagerRepository campaignManagerRepository;
+	private SecurityConfig securityConfig;
 
 	@Autowired
 	private SessionService sessionService;
 
 	@Autowired
-	private SecurityConfig securityConfig;
+	private CampaignManagerRepository campaignManagerRepository;
+
+	@Resource
+	private Validator passwordUpdateValidator;
 
 	@Override
 	public Optional<CampaignManager> getByUsername(final String username) {
@@ -31,24 +36,14 @@ public class DefaultCampaignManagerService implements CampaignManagerService {
 	}
 
 	@Override
-	public void updatePassword(final String oldPassword, final String newPassword, final BindingResult errors) {
-		final CampaignManager sessionUser = getSessionCampaignManager();
-		final PasswordEncoder pwdEncoder = securityConfig.passwordEncoder();
-
-		if (newPassword.equals(oldPassword))
-			errors.reject("err.password.samepassword");
-		else if (newPassword.length() < 6)
-			errors.reject("err.password.length");
-		else if (!pwdEncoder.matches(oldPassword, sessionUser.getPassword()))
-			errors.reject("err.password.mismatch");
-
+	public void updatePassword(final PasswordUpdate passwordUpdate, final Errors errors) {
+		passwordUpdateValidator.validate(passwordUpdate, errors);
 		if (!errors.hasErrors()) {
-			sessionUser.setPassword(pwdEncoder.encode(newPassword));
+			final CampaignManager sessionUser = getSessionCampaignManager();
+			sessionUser.setPassword(securityConfig.getPasswordEncoder().encode(passwordUpdate.getNewPassword()));
 			sessionUser.setPasswordChangeRequired(false);
 			campaignManagerRepository.save(sessionUser);
 		}
-
-		sessionService.setSessionUser(sessionUser);
 	}
 
 	@Override

@@ -2,14 +2,15 @@ package com.greenapper.services;
 
 import com.greenapper.models.Campaign;
 import com.greenapper.models.CampaignManager;
-import org.springframework.validation.BindingResult;
+import com.greenapper.models.PasswordUpdate;
+import org.springframework.validation.Errors;
 
 import java.util.Optional;
 
 public interface CampaignManagerService {
 	Optional<CampaignManager> getByUsername(final String username);
 
-	void updatePassword(final String oldPassword, final String newPassword, final BindingResult errors);
+	void updatePassword(final PasswordUpdate passwordUpdate, final Errors errors);
 
 	void addCampaignToCurrentUser(final Campaign campaign);
 
