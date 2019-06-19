@@ -1,6 +1,6 @@
 package com.greenapper.controllers;
 
-import com.greenapper.models.User;
+import com.greenapper.models.PasswordUpdate;
 import com.greenapper.services.CampaignManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,13 +23,13 @@ public class CampaignManagerController {
 	private CampaignManagerService campaignManagerService;
 
 	@GetMapping(PASSWORD_UPDATE_URI)
-	public String resetPassword(final User user) {
+	public String resetPassword(final PasswordUpdate passwordUpdate) {
 		return PASSWORD_UPDATE_FORM;
 	}
 
 	@PatchMapping(PASSWORD_UPDATE_URI)
-	public String updatePassword(final User user, final BindingResult bindingResult) {
-		campaignManagerService.updatePassword(user.getPassword(), bindingResult);
+	public String updatePassword(final PasswordUpdate passwordUpdate, final BindingResult bindingResult) {
+		campaignManagerService.updatePassword(passwordUpdate.getOldPassword(), passwordUpdate.getNewPassword(), bindingResult);
 
 		if (!bindingResult.hasErrors())
 			return PASSWORD_UPDATE_SUCCESS_REDIRECT;

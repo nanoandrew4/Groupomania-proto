@@ -31,16 +31,19 @@ public class DefaultCampaignManagerService implements CampaignManagerService {
 	}
 
 	@Override
-	public void updatePassword(final String newPassword, final BindingResult errors) {
+	public void updatePassword(final String oldPassword, final String newPassword, final BindingResult errors) {
 		final CampaignManager sessionUser = getSessionCampaignManager();
 		final PasswordEncoder pwdEncoder = securityConfig.passwordEncoder();
-		if (pwdEncoder.matches(newPassword, sessionUser.getPassword()))
+
+		if (newPassword.equals(oldPassword))
 			errors.reject("err.password.samepassword");
 		else if (newPassword.length() < 6)
 			errors.reject("err.password.length");
+		else if (!pwdEncoder.matches(oldPassword, sessionUser.getPassword()))
+			errors.reject("err.password.mismatch");
 
 		if (!errors.hasErrors()) {
-			sessionUser.setPassword(newPassword);
+			sessionUser.setPassword(pwdEncoder.encode(newPassword));
 			sessionUser.setPasswordChangeRequired(false);
 			campaignManagerRepository.save(sessionUser);
 		}

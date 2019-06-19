@@ -3,7 +3,7 @@ package campaign_manager;
 import com.greenapper.Main;
 import com.greenapper.controllers.CampaignManagerController;
 import com.greenapper.models.CampaignManager;
-import com.greenapper.models.User;
+import com.greenapper.models.PasswordUpdate;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.SessionService;
 import org.junit.Test;
@@ -33,17 +33,39 @@ public class CampaignManagerIntegrationTest {
 	private SessionService sessionService;
 
 	@Test
-	public void updatePasswordLessThan6Chars() {
+	public void updatePasswordOldPasswordInvalid() {
 		final CampaignManager campaignManager = campaignManagerService.getByUsername("admin").orElse(null);
-		final BindingResult bindingResult = new BeanPropertyBindingResult(campaignManager, "campaignManager");
 
 		assertNotNull(campaignManager);
 
 		sessionService.setSessionUser(campaignManager);
 
-		campaignManager.setPassword("12345");
+		final PasswordUpdate passwordUpdate = new PasswordUpdate();
+		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		passwordUpdate.setOldPassword("wrongpass");
+		passwordUpdate.setNewPassword("12345678");
 
-		final String ret = campaignManagerController.updatePassword(campaignManager, bindingResult);
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
+
+		assertEquals(ret, CampaignManagerController.PASSWORD_UPDATE_FORM);
+		assertEquals(1, bindingResult.getErrorCount());
+		assertEquals("err.password.mismatch", bindingResult.getAllErrors().get(0).getCode());
+	}
+
+	@Test
+	public void updatePasswordLessThan6Chars() {
+		final CampaignManager campaignManager = campaignManagerService.getByUsername("admin").orElse(null);
+
+		assertNotNull(campaignManager);
+
+		sessionService.setSessionUser(campaignManager);
+
+		final PasswordUpdate passwordUpdate = new PasswordUpdate();
+		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		passwordUpdate.setOldPassword("testing");
+		passwordUpdate.setNewPassword("12345");
+
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
 
 		assertEquals(ret, CampaignManagerController.PASSWORD_UPDATE_FORM);
 		assertEquals(1, bindingResult.getErrorCount());
@@ -58,11 +80,12 @@ public class CampaignManagerIntegrationTest {
 
 		sessionService.setSessionUser(campaignManager);
 
-		final User newPwdUser = new User();
-		final BindingResult bindingResult = new BeanPropertyBindingResult(newPwdUser, "user");
-		newPwdUser.setPassword("testing");
+		final PasswordUpdate passwordUpdate = new PasswordUpdate();
+		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		passwordUpdate.setOldPassword("testing");
+		passwordUpdate.setNewPassword("testing");
 
-		final String ret = campaignManagerController.updatePassword(newPwdUser, bindingResult);
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_FORM, ret);
 		assertEquals(1, bindingResult.getErrorCount());
@@ -78,11 +101,12 @@ public class CampaignManagerIntegrationTest {
 
 		sessionService.setSessionUser(campaignManager);
 
-		final User newPwdUser = new User();
-		final BindingResult bindingResult = new BeanPropertyBindingResult(newPwdUser, "user");
-		newPwdUser.setPassword("newpassword");
+		final PasswordUpdate passwordUpdate = new PasswordUpdate();
+		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		passwordUpdate.setOldPassword("testing");
+		passwordUpdate.setNewPassword("newpassword");
 
-		final String ret = campaignManagerController.updatePassword(newPwdUser, bindingResult);
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_SUCCESS_REDIRECT, ret);
 		assertFalse(bindingResult.hasErrors());

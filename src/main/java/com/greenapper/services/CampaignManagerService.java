@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface CampaignManagerService {
 	Optional<CampaignManager> getByUsername(final String username);
 
-	void updatePassword(final String newPassword, final BindingResult errors);
+	void updatePassword(final String oldPassword, final String newPassword, final BindingResult errors);
 
 	void addCampaignToCurrentUser(final Campaign campaign);
 

@@ -26,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/home", "/login").permitAll()
 				.antMatchers("/campaign-manager/**").access("hasRole('CAMPAIGN_MANAGER')")
+				.antMatchers("/campaigns").access("hasRole('CAMPAIGN_MANAGER')")
 				.and()
 				.formLogin().loginPage("/login").loginProcessingUrl("/login").failureUrl("/login-error")
 				.and()
