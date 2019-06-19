@@ -6,6 +6,7 @@ import com.greenapper.models.CampaignManager;
 import com.greenapper.models.PasswordUpdate;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.SessionService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,17 @@ public class CampaignManagerIntegrationTest {
 	@Autowired
 	private SessionService sessionService;
 
-	@Test
-	public void updatePasswordOldPasswordInvalid() {
+	@Before
+	public void setup() {
 		final CampaignManager campaignManager = campaignManagerService.getByUsername("admin").orElse(null);
 
 		assertNotNull(campaignManager);
 
 		sessionService.setSessionUser(campaignManager);
+	}
 
+	@Test
+	public void updatePasswordOldPasswordInvalid() {
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
 		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("wrongpass");
@@ -54,12 +58,6 @@ public class CampaignManagerIntegrationTest {
 
 	@Test
 	public void updatePasswordLessThan6Chars() {
-		final CampaignManager campaignManager = campaignManagerService.getByUsername("admin").orElse(null);
-
-		assertNotNull(campaignManager);
-
-		sessionService.setSessionUser(campaignManager);
-
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
 		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("testing");
@@ -74,12 +72,6 @@ public class CampaignManagerIntegrationTest {
 
 	@Test
 	public void updatePasswordSamePassword() {
-		final CampaignManager campaignManager = campaignManagerService.getByUsername("admin").orElse(null);
-
-		assertNotNull(campaignManager);
-
-		sessionService.setSessionUser(campaignManager);
-
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
 		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("testing");
@@ -95,12 +87,6 @@ public class CampaignManagerIntegrationTest {
 	@Test
 	@DirtiesContext
 	public void updatePasswordSuccessfully() {
-		final CampaignManager campaignManager = campaignManagerService.getByUsername("admin").orElse(null);
-
-		assertNotNull(campaignManager);
-
-		sessionService.setSessionUser(campaignManager);
-
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
 		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("testing");

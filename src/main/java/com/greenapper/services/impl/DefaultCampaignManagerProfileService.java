@@ -1,4 +1,4 @@
-package com.greenapper.services.impl.security;
+package com.greenapper.services.impl;
 
 import com.greenapper.models.CampaignManager;
 import com.greenapper.models.CampaignManagerProfile;
@@ -8,12 +8,17 @@ import com.greenapper.services.CampaignManagerProfileService;
 import com.greenapper.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
+import javax.annotation.Resource;
 import java.util.Optional;
 
 @Service
 public class DefaultCampaignManagerProfileService implements CampaignManagerProfileService {
+
+	@Autowired
+	private SessionService sessionService;
 
 	@Autowired
 	private CampaignManagerRepository campaignManagerRepository;
@@ -21,8 +26,8 @@ public class DefaultCampaignManagerProfileService implements CampaignManagerProf
 	@Autowired
 	private CampaignManagerProfileRepository campaignManagerProfileRepository;
 
-	@Autowired
-	private SessionService sessionService;
+	@Resource
+	private Validator campaignManagerProfileValidator;
 
 	@Override
 	public Optional<CampaignManagerProfile> getProfileForCurrentUser() {
@@ -30,8 +35,8 @@ public class DefaultCampaignManagerProfileService implements CampaignManagerProf
 	}
 
 	@Override
-	public void updateProfile(final CampaignManagerProfile updatedProfile, final BindingResult errors) {
-		validateProfile(updatedProfile, errors);
+	public void updateProfile(final CampaignManagerProfile updatedProfile, final Errors errors) {
+		campaignManagerProfileValidator.validate(updatedProfile, errors);
 		if (!errors.hasErrors()) {
 			final Optional<CampaignManager> campaignManager = campaignManagerRepository.findById(sessionService.getSessionUser().getId());
 			if (campaignManager.isPresent()) {
@@ -42,12 +47,5 @@ public class DefaultCampaignManagerProfileService implements CampaignManagerProf
 				sessionService.setSessionUser(campaignManager.get());
 			}
 		}
-	}
-
-	private void validateProfile(final CampaignManagerProfile updatedProfile, final BindingResult errors) {
-		if (updatedProfile.getName() == null || updatedProfile.getName().trim().isEmpty())
-			errors.reject("err.profile.name");
-		if (updatedProfile.getEmail() == null || updatedProfile.getEmail().trim().isEmpty())
-			errors.reject("err.profile.email");
 	}
 }
