@@ -1,7 +1,8 @@
-package com.greenapper.models;
+package com.greenapper.models.campaigns;
 
 import com.greenapper.enums.CampaignState;
 import com.greenapper.enums.CampaignType;
+import com.greenapper.models.CampaignManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -36,6 +37,12 @@ public class Campaign {
 	private Long quantity;
 
 	private boolean showAfterExpiration;
+
+	private Double originalPrice;
+
+	private double percentDiscount;
+
+	private double discountedPrice;
 
 	private CampaignState state;
 
@@ -125,5 +132,29 @@ public class Campaign {
 
 	public void setState(CampaignState state) {
 		this.state = state;
+	}
+
+	public Double getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(Double originalPrice) {
+		this.originalPrice = originalPrice;
+	}
+
+	public double getPercentDiscount() {
+		return percentDiscount;
+	}
+
+	public void setPercentDiscount(double percentDiscount) {
+		this.percentDiscount = percentDiscount;
+	}
+
+	public double getDiscountedPrice() {
+		return discountedPrice;
+	}
+
+	public void setDiscountedPrice(double discountedPrice) {
+		this.discountedPrice = discountedPrice;
 	}
 }

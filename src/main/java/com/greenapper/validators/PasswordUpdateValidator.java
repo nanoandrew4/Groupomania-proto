@@ -27,8 +27,13 @@ public class PasswordUpdateValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		final User sessionUser = sessionService.getSessionUser();
+		if (target == null) {
+			errors.reject("err.password");
+			return;
+		}
+
 		final PasswordUpdate passwordUpdate = (PasswordUpdate) target;
+		final User sessionUser = sessionService.getSessionUser();
 		final PasswordEncoder pwdEncoder = securityConfig.getPasswordEncoder();
 
 		if (pwdEncoder.matches(passwordUpdate.getNewPassword(), sessionUser.getPassword()))

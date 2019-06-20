@@ -1,6 +1,6 @@
 package com.greenapper.services;
 
-import com.greenapper.models.Campaign;
+import com.greenapper.models.campaigns.Campaign;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;

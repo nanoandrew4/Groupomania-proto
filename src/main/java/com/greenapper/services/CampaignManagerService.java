@@ -1,8 +1,8 @@
 package com.greenapper.services;
 
-import com.greenapper.models.Campaign;
 import com.greenapper.models.CampaignManager;
 import com.greenapper.models.PasswordUpdate;
+import com.greenapper.models.campaigns.Campaign;
 import org.springframework.validation.Errors;
 
 import java.util.Optional;

@@ -24,6 +24,11 @@ public class CampaignManagerProfileValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
+		if (target == null) {
+			errors.reject("err.profile");
+			return;
+		}
+
 		final CampaignManagerProfile updatedProfile = (CampaignManagerProfile) target;
 
 		if (updatedProfile.getName() == null || updatedProfile.getName().trim().isEmpty())

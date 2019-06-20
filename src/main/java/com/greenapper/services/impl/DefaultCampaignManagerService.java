@@ -1,9 +1,9 @@
 package com.greenapper.services.impl;
 
 import com.greenapper.config.SecurityConfig;
-import com.greenapper.models.Campaign;
 import com.greenapper.models.CampaignManager;
 import com.greenapper.models.PasswordUpdate;
+import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.repositories.CampaignManagerRepository;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.SessionService;

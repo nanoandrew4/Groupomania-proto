@@ -1,5 +1,7 @@
 package com.greenapper.models;
 
+import com.greenapper.models.campaigns.Campaign;
+
 import javax.persistence.*;
 import java.util.List;
 
