@@ -39,7 +39,7 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.image}">Campaign image</label>
-        <input accept="image/x-png,image/jpeg,image/jpg" name="file" type="file"/>
+        <input accept="image/x-png,image/jpeg,image/jpg" type="file" name="campaignImage"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.startDate}">Campaign start date</label>
@@ -68,11 +68,11 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.showAfterExpiration}">Show after expiration</label>
-        <select id="campaignExpirationDropdown" name="campaignExpirationDropdown">
-            <option selected="selected" th:field="*{showAfterExpiration}" th:text="#{campaign.showAfterExpiration.true}"
-                    value="true"></option>
-            <option th:field="*{showAfterExpiration}" th:text="#{campaign.showAfterExpiration.false}"
-                    value="false"></option>
+        <select id="campaignExpirationDropdown" name="campaignExpirationDropdown" th:field="*{showAfterExpiration}">
+            <option id="showAfterExpiration" th:text="#{campaign.showAfterExpiration.true}"
+                    th:value="true"></option>
+            <option id="noShowAfterExpiration" th:text="#{campaign.showAfterExpiration.false}"
+                    th:value="false"></option>
         </select>
     </div>
 

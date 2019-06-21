@@ -37,7 +37,7 @@ public class CampaignValidator implements Validator {
 			errors.reject(errorCode);
 	}
 
-	public static void rejectDateIfEmpty(final LocalDate date, final String errorCode, final Errors errors) {
+	public static void rejectDateIfEmptyOrBeforeNow(final LocalDate date, final String errorCode, final Errors errors) {
 		if (date == null || date.isBefore(LocalDate.now()))
 			errors.reject(errorCode);
 	}
@@ -58,8 +58,8 @@ public class CampaignValidator implements Validator {
 		rejectIfNegative(Double.valueOf(campaign.getQuantity()), "err.campaign.quantity", errors);
 		rejectIfNull(campaign.isShowAfterExpiration(), "err.campaign.showAfterExpiration", errors);
 		rejectIfNegative(campaign.getOriginalPrice(), "err.campaign.defaultPrice", errors);
-		rejectDateIfEmpty(campaign.getStartDate(), "err.campaign.offer.startDate", errors);
-		rejectDateIfEmpty(campaign.getEndDate(), "err.campaign.offer.endDate", errors);
+		rejectDateIfEmptyOrBeforeNow(campaign.getStartDate(), "err.campaign.offer.startDate", errors);
+		rejectDateIfEmptyOrBeforeNow(campaign.getEndDate(), "err.campaign.offer.endDate", errors);
 
 		if ((campaign.getDiscountedPrice() == null || campaign.getDiscountedPrice() < 0) && (campaign.getPercentDiscount() == null || campaign.getPercentDiscount() < 0))
 			errors.reject("err.campaign.discountedPriceOrPercent");

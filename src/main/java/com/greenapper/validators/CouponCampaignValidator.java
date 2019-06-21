@@ -27,5 +27,7 @@ public class CouponCampaignValidator implements Validator {
 		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerName(), "err.campaign.coupon.managerName", errors);
 		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerEmail(), "err.campaign.coupon.managerEmail", errors);
 		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerAddress(), "err.campaign.coupon.managerAddress", errors);
+		CampaignValidator.rejectDateIfEmptyOrBeforeNow(couponCampaign.getCouponStartDate(), "err.campaign.coupon.couponStartDate", errors);
+		CampaignValidator.rejectDateIfEmptyOrBeforeNow(couponCampaign.getCouponEndDate(), "err.campaign.coupon.couponEndDate", errors);
 	}
 }

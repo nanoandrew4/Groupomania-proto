@@ -1,7 +1,7 @@
 package com.greenapper.controllers;
 
+import com.greenapper.enums.CampaignType;
 import com.greenapper.models.campaigns.Campaign;
-import com.greenapper.models.campaigns.OfferCampaign;
 import com.greenapper.services.CampaignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,8 @@ public class CampaignController {
 
 	public static final String CAMPAIGN_UPDATE_FORM = "campaigns/offerCampaign";
 
+	public static final String CAMPAIGN_DEFAULT_REDIRECTION = "redirect:" + CAMPAIGN_UPDATE_URI + "?type=" + CampaignType.OFFER.displayName;
+
 	@GetMapping(CAMPAIGNS_OVERVIEW_URI)
 	public String getCampaignManagerOverview() {
 		return "campaigns/overview";
@@ -47,13 +49,11 @@ public class CampaignController {
 				LOG.error(e.getMessage(), e);
 		}
 
-		model.addAttribute("campaign", new OfferCampaign());
-		return CAMPAIGN_UPDATE_FORM;
+		return CAMPAIGN_DEFAULT_REDIRECTION;
 	}
 
 	@PostMapping(CAMPAIGN_UPDATE_URI)
 	public String updateCampaign(final Campaign campaign, final Errors errors) {
-
 		final CampaignService campaignService = (CampaignService) applicationContext.getBean(campaign.getType().displayName.toLowerCase() + "CampaignService");
 		if (campaign.getId() == null)
 			campaignService.createCampaign(campaign, errors);

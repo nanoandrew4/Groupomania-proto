@@ -27,6 +27,24 @@
         <div th:replace="campaigns/campaignFragments :: campaignFields">Generic campaign fields</div>
 
         <div class="form-group col-4">
+            <label th:text="#{campaign.coupon.couponStartDate}">Coupon start date</label>
+            <div class="input-group date" data-date-format="dd-mm-yyyy">
+                <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponStartDate}" type="text">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-4">
+            <label th:text="#{campaign.coupon.couponEndDate}">Coupon end date</label>
+            <div class="input-group date" data-date-format="dd-mm-yyyy">
+                <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponEndDate}" type="text">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-4">
             <label th:text="#{campaign.coupon.originalPrice}">Original price</label>
             <input class="form-control" th:field="*{originalPrice}"/>
         </div>

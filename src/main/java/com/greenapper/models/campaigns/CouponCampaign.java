@@ -4,6 +4,7 @@ import com.greenapper.enums.CampaignType;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "CouponCampaign")
@@ -16,6 +17,10 @@ public class CouponCampaign extends Campaign {
 	private String campaignManagerEmail;
 
 	private String campaignManagerAddress;
+
+	private LocalDate couponStartDate;
+
+	private LocalDate couponEndDate;
 
 	public CouponCampaign() {
 		this.setType(CampaignType.COUPON);
@@ -51,5 +56,21 @@ public class CouponCampaign extends Campaign {
 
 	public void setCampaignManagerAddress(String campaignManagerAddress) {
 		this.campaignManagerAddress = campaignManagerAddress;
+	}
+
+	public LocalDate getCouponStartDate() {
+		return couponStartDate;
+	}
+
+	public void setCouponStartDate(LocalDate couponStartDate) {
+		this.couponStartDate = couponStartDate;
+	}
+
+	public LocalDate getCouponEndDate() {
+		return couponEndDate;
+	}
+
+	public void setCouponEndDate(LocalDate couponEndDate) {
+		this.couponEndDate = couponEndDate;
 	}
 }

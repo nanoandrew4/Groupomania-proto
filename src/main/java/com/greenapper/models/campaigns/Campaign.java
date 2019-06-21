@@ -3,6 +3,7 @@ package com.greenapper.models.campaigns;
 import com.greenapper.enums.CampaignState;
 import com.greenapper.enums.CampaignType;
 import com.greenapper.models.CampaignManager;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @Inheritance(
 		strategy = InheritanceType.JOINED
 )
-public class Campaign {
+public abstract class Campaign {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -26,12 +27,14 @@ public class Campaign {
 	private String description;
 
 	@Lob
-	private MultipartFile productImg;
+	private MultipartFile campaignImage;
 
 	private CampaignType type;
 
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate startDate;
 
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate endDate;
 
 	private Long quantity;
@@ -78,12 +81,12 @@ public class Campaign {
 		this.description = description;
 	}
 
-	public MultipartFile getProductImg() {
-		return productImg;
+	public MultipartFile getCampaignImage() {
+		return campaignImage;
 	}
 
-	public void setProductImg(MultipartFile productImg) {
-		this.productImg = productImg;
+	public void setCampaignImage(MultipartFile campaignImage) {
+		this.campaignImage = campaignImage;
 	}
 
 	public CampaignType getType() {
