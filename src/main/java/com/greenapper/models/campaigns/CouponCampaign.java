@@ -1,7 +1,6 @@
 package com.greenapper.models.campaigns;
 
 import com.greenapper.enums.CampaignType;
-import com.greenapper.models.CampaignManagerProfile;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -12,7 +11,11 @@ public class CouponCampaign extends Campaign {
 
 	private String couponDescription;
 
-	private CampaignManagerProfile contactInformation;
+	private String campaignManagerName;
+
+	private String campaignManagerEmail;
+
+	private String campaignManagerAddress;
 
 	public CouponCampaign() {
 		this.setType(CampaignType.COUPON);
@@ -26,11 +29,27 @@ public class CouponCampaign extends Campaign {
 		this.couponDescription = couponDescription;
 	}
 
-	public CampaignManagerProfile getContactInformation() {
-		return contactInformation;
+	public String getCampaignManagerName() {
+		return campaignManagerName;
 	}
 
-	public void setContactInformation(CampaignManagerProfile contactInformation) {
-		this.contactInformation = contactInformation;
+	public void setCampaignManagerName(String campaignManagerName) {
+		this.campaignManagerName = campaignManagerName;
+	}
+
+	public String getCampaignManagerEmail() {
+		return campaignManagerEmail;
+	}
+
+	public void setCampaignManagerEmail(String campaignManagerEmail) {
+		this.campaignManagerEmail = campaignManagerEmail;
+	}
+
+	public String getCampaignManagerAddress() {
+		return campaignManagerAddress;
+	}
+
+	public void setCampaignManagerAddress(String campaignManagerAddress) {
+		this.campaignManagerAddress = campaignManagerAddress;
 	}
 }

@@ -26,6 +26,9 @@
 </form>
 
 <div class="form-group" th:fragment="campaignFields">
+    <div hidden="hidden">
+        <input class="form-control" th:field="*{id}"/>
+    </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.title}">Title</label>
         <input autofocus="autofocus" class="form-control" th:field="*{title}"/>
@@ -59,6 +62,9 @@
     <div class="form-group col-4">
         <label th:text="#{campaign.quantity}">Available quantity</label>
         <input class="form-control" th:field="*{quantity}"/>
+    </div>
+    <div hidden="hidden">
+        <input class="form-control" th:field="*{type}"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.showAfterExpiration}">Show after expiration</label>

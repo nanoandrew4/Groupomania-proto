@@ -60,5 +60,8 @@ public class CampaignValidator implements Validator {
 		rejectIfNegative(campaign.getOriginalPrice(), "err.campaign.defaultPrice", errors);
 		rejectDateIfEmpty(campaign.getStartDate(), "err.campaign.offer.startDate", errors);
 		rejectDateIfEmpty(campaign.getEndDate(), "err.campaign.offer.endDate", errors);
+
+		if ((campaign.getDiscountedPrice() == null || campaign.getDiscountedPrice() < 0) && (campaign.getPercentDiscount() == null || campaign.getPercentDiscount() < 0))
+			errors.reject("err.campaign.discountedPriceOrPercent");
 	}
 }

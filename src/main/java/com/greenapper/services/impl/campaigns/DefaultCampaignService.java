@@ -1,20 +1,19 @@
-package com.greenapper.services.impl;
+package com.greenapper.services.impl.campaigns;
 
-import com.greenapper.models.Campaign;
+import com.greenapper.enums.CampaignState;
 import com.greenapper.models.CampaignManager;
+import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.repositories.CampaignRepository;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.CampaignService;
 import com.greenapper.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class DefaultCampaignService implements CampaignService {
+public abstract class DefaultCampaignService implements CampaignService {
 
 	@Autowired
 	private CampaignRepository campaignRepository;
@@ -26,20 +25,27 @@ public class DefaultCampaignService implements CampaignService {
 	private SessionService sessionService;
 
 	@Override
-	public void createCampaign(final Campaign model, final BindingResult errors) {
-		validateCampaign(model, errors);
+	public void createCampaign(final Campaign campaign, final Errors errors) {
+		campaign.setOwner(getSessionCampaignManager());
+		campaign.setState(CampaignState.INACTIVE);
+
+		setDefaultsForCampaignSubtype(campaign);
+
+		if (campaign.getQuantity() == null || campaign.getQuantity() < 0)
+			campaign.setQuantity(Long.MAX_VALUE);
+
+		validateCampaign(campaign, errors);
 		if (!errors.hasErrors()) {
-			model.setOwner(getSessionCampaignManager());
-			campaignRepository.save(model);
-			userService.addCampaignToCurrentUser(model);
+			campaignRepository.save(campaign);
+			userService.addCampaignToCurrentUser(campaign);
 		}
 	}
 
 	@Override
-	public void editCampaign(final Campaign model, final BindingResult errors) {
-		validateCampaign(model, errors);
+	public void editCampaign(final Campaign campaign, final Errors errors) {
+		validateCampaign(campaign, errors);
 		if (!errors.hasErrors())
-			campaignRepository.save(model);
+			campaignRepository.save(campaign);
 	}
 
 	@Override
@@ -58,10 +64,6 @@ public class DefaultCampaignService implements CampaignService {
 	@Override
 	public boolean isCampaignArchived(final Long id) {
 		return campaignRepository.getCampaignArchivedById(id);
-	}
-
-	private void validateCampaign(final Campaign campaign, final BindingResult errors) {
-
 	}
 
 	private CampaignManager getSessionCampaignManager() {

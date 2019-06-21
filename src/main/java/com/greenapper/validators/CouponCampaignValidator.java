@@ -13,9 +13,6 @@ public class CouponCampaignValidator implements Validator {
 	@Resource
 	private Validator campaignValidator;
 
-	@Resource
-	private Validator campaignManagerProfileValidator;
-
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return CouponCampaign.class.equals(clazz);
@@ -27,7 +24,8 @@ public class CouponCampaignValidator implements Validator {
 
 		final CouponCampaign couponCampaign = (CouponCampaign) target;
 		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCouponDescription(), "err.campaign.coupon.description", errors);
-
-		campaignManagerProfileValidator.validate(couponCampaign.getContactInformation(), errors);
+		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerName(), "err.campaign.coupon.managerName", errors);
+		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerEmail(), "err.campaign.coupon.managerEmail", errors);
+		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerAddress(), "err.campaign.coupon.managerAddress", errors);
 	}
 }

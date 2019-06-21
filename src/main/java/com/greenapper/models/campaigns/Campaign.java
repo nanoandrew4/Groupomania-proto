@@ -40,9 +40,9 @@ public class Campaign {
 
 	private Double originalPrice;
 
-	private double percentDiscount;
+	private Double percentDiscount;
 
-	private double discountedPrice;
+	private Double discountedPrice;
 
 	private CampaignState state;
 
@@ -142,19 +142,19 @@ public class Campaign {
 		this.originalPrice = originalPrice;
 	}
 
-	public double getPercentDiscount() {
+	public Double getPercentDiscount() {
 		return percentDiscount;
 	}
 
-	public void setPercentDiscount(double percentDiscount) {
+	public void setPercentDiscount(Double percentDiscount) {
 		this.percentDiscount = percentDiscount;
 	}
 
-	public double getDiscountedPrice() {
+	public Double getDiscountedPrice() {
 		return discountedPrice;
 	}
 
-	public void setDiscountedPrice(double discountedPrice) {
+	public void setDiscountedPrice(Double discountedPrice) {
 		this.discountedPrice = discountedPrice;
 	}
 }
