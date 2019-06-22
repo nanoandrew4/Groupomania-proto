@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+		webEnvironment = SpringBootTest.WebEnvironment.MOCK,
 		classes = Main.class
 )
 public class CampaignManagerProfileIntegrationTest {

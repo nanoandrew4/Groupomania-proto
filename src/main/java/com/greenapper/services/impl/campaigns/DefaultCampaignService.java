@@ -31,14 +31,9 @@ public abstract class DefaultCampaignService implements CampaignService {
 
 		setDefaultsForCampaignSubtype(campaign);
 
-		if (campaign.getQuantity() == null || campaign.getQuantity() < 0)
-			campaign.setQuantity(Long.MAX_VALUE);
-
 		validateCampaign(campaign, errors);
-		if (!errors.hasErrors()) {
+		if (!errors.hasErrors())
 			campaignRepository.save(campaign);
-			userService.addCampaignToCurrentUser(campaign);
-		}
 	}
 
 	@Override

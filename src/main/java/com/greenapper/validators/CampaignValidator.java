@@ -6,6 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Component
 public class CampaignValidator implements Validator {
@@ -22,7 +23,7 @@ public class CampaignValidator implements Validator {
 			errors.reject(errorCode);
 	}
 
-	public static void rejectIfNegative(final Double value, final String errorCode, final Errors errors) {
+	public static void rejectIfNumberNullOrNegative(final Double value, final String errorCode, final Errors errors) {
 		if (value == null || value < 0)
 			errors.reject(errorCode);
 	}
@@ -55,11 +56,13 @@ public class CampaignValidator implements Validator {
 		rejectStringIfEmptyOrTooLong(campaign.getDescription(), "err.campaign.description", errors);
 		rejectStringIfEmptyOrTooLong(campaign.getType().toString(), "err.campaign.type", errors);
 		rejectIfNull(campaign.getOwner(), "err.campaign.owner", errors);
-		rejectIfNegative(Double.valueOf(campaign.getQuantity()), "err.campaign.quantity", errors);
-		rejectIfNull(campaign.isShowAfterExpiration(), "err.campaign.showAfterExpiration", errors);
-		rejectIfNegative(campaign.getOriginalPrice(), "err.campaign.defaultPrice", errors);
-		rejectDateIfEmptyOrBeforeNow(campaign.getStartDate(), "err.campaign.offer.startDate", errors);
-		rejectDateIfEmptyOrBeforeNow(campaign.getEndDate(), "err.campaign.offer.endDate", errors);
+		rejectIfNumberNullOrNegative(Double.valueOf(campaign.getQuantity()), "err.campaign.quantity", errors);
+		rejectIfNumberNullOrNegative(campaign.getOriginalPrice(), "err.campaign.originalPrice", errors);
+		rejectDateIfEmptyOrBeforeNow(campaign.getStartDate(), "err.campaign.startDate", errors);
+		rejectDateIfEmptyOrBeforeNow(campaign.getEndDate(), "err.campaign.endDate", errors);
+
+		if (campaign.getStartDate() != null && campaign.getEndDate() != null && campaign.getStartDate().isAfter(campaign.getEndDate().minus(1, ChronoUnit.DAYS)))
+			errors.reject("err.campaign.startDateAfterEndDate");
 
 		if ((campaign.getDiscountedPrice() == null || campaign.getDiscountedPrice() < 0) && (campaign.getPercentDiscount() == null || campaign.getPercentDiscount() < 0))
 			errors.reject("err.campaign.discountedPriceOrPercent");

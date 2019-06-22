@@ -5,6 +5,7 @@ import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.services.CampaignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -34,19 +35,21 @@ public class CampaignController {
 
 	public static final String CAMPAIGN_DEFAULT_REDIRECTION = "redirect:" + CAMPAIGN_UPDATE_URI + "?type=" + CampaignType.OFFER.displayName;
 
+	public static final String CAMPAIGN_UPDATE_SUCCESS_REDIRECT = "redirect:" + CAMPAIGNS_OVERVIEW_URI;
+
 	@GetMapping(CAMPAIGNS_OVERVIEW_URI)
 	public String getCampaignManagerOverview() {
 		return "campaigns/overview";
 	}
 
 	@GetMapping(CAMPAIGN_UPDATE_URI)
-	public String getOfferCampaignUpdatePage(final Model model, @RequestParam(required = false) final String type) {
+	public String getCampaignUpdateForm(final Model model, @RequestParam(required = false) final String type) {
 		try {
 			model.addAttribute("campaign", Class.forName(Campaign.class.getPackage().getName() + "." + type + "Campaign").getConstructor().newInstance());
 			return "campaigns/" + type.toLowerCase() + "Campaign";
 		} catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			if (type != null)
-				LOG.error(e.getMessage(), e);
+				LOG.error("Could not create Campaign model from type: \'" + type + "\', will use default redirect...");
 		}
 
 		return CAMPAIGN_DEFAULT_REDIRECTION;
@@ -54,14 +57,19 @@ public class CampaignController {
 
 	@PostMapping(CAMPAIGN_UPDATE_URI)
 	public String updateCampaign(final Campaign campaign, final Errors errors) {
-		final CampaignService campaignService = (CampaignService) applicationContext.getBean(campaign.getType().displayName.toLowerCase() + "CampaignService");
-		if (campaign.getId() == null)
-			campaignService.createCampaign(campaign, errors);
-		else
-			campaignService.editCampaign(campaign, errors);
+		try {
+			final CampaignService campaignService = (CampaignService) applicationContext.getBean(campaign.getType().displayName.toLowerCase() + "CampaignService");
+			if (campaign.getId() == null)
+				campaignService.createCampaign(campaign, errors);
+			else
+				campaignService.editCampaign(campaign, errors);
 
-		if (!errors.hasErrors()) {
-			return "redirect:" + CAMPAIGNS_OVERVIEW_URI;
+			if (!errors.hasErrors()) {
+				return CAMPAIGN_UPDATE_SUCCESS_REDIRECT;
+			}
+		} catch (NoSuchBeanDefinitionException | NullPointerException e) {
+			LOG.error("", e);
+			errors.reject("err.campaign.type");
 		}
 		return CAMPAIGN_UPDATE_FORM;
 	}

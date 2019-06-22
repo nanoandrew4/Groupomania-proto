@@ -14,13 +14,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+		webEnvironment = SpringBootTest.WebEnvironment.MOCK,
 		classes = Main.class
 )
 public class CampaignManagerIntegrationTest {
@@ -45,56 +45,56 @@ public class CampaignManagerIntegrationTest {
 	@Test
 	public void updatePasswordOldPasswordInvalid() {
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("wrongpass");
 		passwordUpdate.setNewPassword("12345678");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
 
-		assertEquals(ret, CampaignManagerController.PASSWORD_UPDATE_FORM);
-		assertEquals(1, bindingResult.getErrorCount());
-		assertEquals("err.password.mismatch", bindingResult.getAllErrors().get(0).getCode());
+		assertEquals(CampaignManagerController.PASSWORD_UPDATE_FORM, ret);
+		assertEquals(1, errors.getErrorCount());
+		assertEquals("err.password.mismatch", errors.getAllErrors().get(0).getCode());
 	}
 
 	@Test
 	public void updatePasswordLessThan6Chars() {
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("testing");
 		passwordUpdate.setNewPassword("12345");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
 
-		assertEquals(ret, CampaignManagerController.PASSWORD_UPDATE_FORM);
-		assertEquals(1, bindingResult.getErrorCount());
-		assertEquals("err.password.length", bindingResult.getAllErrors().get(0).getCode());
+		assertEquals(CampaignManagerController.PASSWORD_UPDATE_FORM, ret);
+		assertEquals(1, errors.getErrorCount());
+		assertEquals("err.password.length", errors.getAllErrors().get(0).getCode());
 	}
 
 	@Test
 	public void updatePasswordSamePassword() {
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("testing");
 		passwordUpdate.setNewPassword("testing");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_FORM, ret);
-		assertEquals(1, bindingResult.getErrorCount());
-		assertEquals("err.password.samepassword", bindingResult.getAllErrors().get(0).getCode());
+		assertEquals(1, errors.getErrorCount());
+		assertEquals("err.password.samepassword", errors.getAllErrors().get(0).getCode());
 	}
 
 	@Test
 	@DirtiesContext
 	public void updatePasswordSuccessfully() {
 		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final BindingResult bindingResult = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
 		passwordUpdate.setOldPassword("testing");
 		passwordUpdate.setNewPassword("newpassword");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, bindingResult);
+		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_SUCCESS_REDIRECT, ret);
-		assertFalse(bindingResult.hasErrors());
+		assertFalse(errors.hasErrors());
 	}
 }

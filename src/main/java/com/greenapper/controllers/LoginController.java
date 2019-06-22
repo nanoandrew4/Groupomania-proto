@@ -1,7 +1,5 @@
 package com.greenapper.controllers;
 
-import com.greenapper.models.CampaignManager;
-import com.greenapper.models.User;
 import com.greenapper.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,14 +16,6 @@ public class LoginController {
 	@GetMapping(value = {"/login"})
 	public String login() {
 		return "login";
-	}
-
-	@GetMapping(value = {"/login-success"})
-	public String loginSuccess() {
-		final User sessionUser = sessionService.getSessionUser();
-		if (sessionUser instanceof CampaignManager)
-			return "redirect:/campaign-manager/login-success";
-		return "redirect:/home";
 	}
 
 	// Login form with error

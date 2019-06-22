@@ -1,6 +1,5 @@
 package com.greenapper.services.impl.campaigns;
 
-import com.greenapper.enums.CampaignType;
 import com.greenapper.models.campaigns.Campaign;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -21,6 +20,5 @@ public class OfferCampaignService extends DefaultCampaignService {
 
 	@Override
 	public void setDefaultsForCampaignSubtype(final Campaign campaignSubtype) {
-		campaignSubtype.setType(CampaignType.OFFER);
 	}
 }

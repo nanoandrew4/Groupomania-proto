@@ -16,11 +16,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DefaultUserDetailsService userDetailsService;
 
-	@Bean
-	public PostLoginRedirectHandler redirectHandler() {
-		return new PostLoginRedirectHandler();
-	}
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()

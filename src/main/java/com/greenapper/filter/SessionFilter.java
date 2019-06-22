@@ -16,10 +16,9 @@ public class SessionFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-		sessionService.setSessionUser();
+		if (sessionService.getSessionUser() == null)
+			sessionService.setSessionUser();
 
 		filterChain.doFilter(servletRequest, servletResponse);
-
-		sessionService.setSessionUser(null);
 	}
 }
