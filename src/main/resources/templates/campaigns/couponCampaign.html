@@ -16,62 +16,53 @@
 <body>
 <div th:replace="fragments :: navbar">Navigation bar fragment</div>
 <div class="container body-content">
-    <h1 th:text="#{campaign.generic.subtitle}">Profile update</h1>
+    <div class="col-lg-6 col-lg-offset-3 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+        <center>
+            <h1 th:text="#{campaign.generic.subtitle}">Campaign settings</h1>
+        </center>
 
-    <form th:replace="campaigns/campaignFragments :: campaignTypeChange">Generic campaign fragment</form>
+        <form th:replace="campaigns/campaignFragments :: campaignTypeChange">Generic campaign fragment</form>
 
-    <form action="#" th:action="@{${T(com.greenapper.controllers.CampaignController).CAMPAIGN_UPDATE_URI}}"
-          th:method="post" th:object="${campaign}">
+        <form action="#" th:action="@{${T(com.greenapper.controllers.CampaignController).CAMPAIGN_UPDATE_URI}}"
+              th:method="post" th:object="${campaign}" enctype="multipart/form-data">
 
-        <form th:replace="fragments :: validationErrors">Generic campaign fragment</form>
-        <div th:replace="campaigns/campaignFragments :: campaignFields">Generic campaign fields</div>
+            <form th:replace="fragments :: validationErrors">Generic campaign fragment</form>
+            <div th:replace="campaigns/campaignFragments :: campaignFields">Generic campaign fields</div>
 
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.couponStartDate}">Coupon start date</label>
-            <div class="input-group date" data-date-format="dd-mm-yyyy">
-                <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponStartDate}" type="text">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
+            <div class="form-group col-4">
+                <label th:text="#{campaign.coupon.couponStartDate}">Coupon start date</label>
+                <div class="input-group date" data-date-format="dd-mm-yyyy">
+                    <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponStartDate}" type="text">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.couponEndDate}">Coupon end date</label>
-            <div class="input-group date" data-date-format="dd-mm-yyyy">
-                <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponEndDate}" type="text">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
+            <div class="form-group col-4">
+                <label th:text="#{campaign.coupon.couponEndDate}">Coupon end date</label>
+                <div class="input-group date" data-date-format="dd-mm-yyyy">
+                    <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponEndDate}" type="text">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.originalPrice}">Original price</label>
-            <input class="form-control" th:field="*{originalPrice}"/>
-        </div>
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.percentDiscount}">Percent discount</label>
-            <input class="form-control" th:field="*{percentDiscount}"/>
-        </div>
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.discountedPrice}">Discounted price</label>
-            <input class="form-control" th:field="*{discountedPrice}"/>
-        </div>
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.managerName}">Contact name</label>
-            <input class="form-control" th:field="*{campaignManagerName}"/>
-        </div>
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.managerEmail}">Contact email</label>
-            <input class="form-control" th:field="*{campaignManagerEmail}"/>
-        </div>
-        <div class="form-group col-4">
-            <label th:text="#{campaign.coupon.managerAddress}">Contact address</label>
-            <input class="form-control" th:field="*{campaignManagerAddress}"/>
-        </div>
-        <p>** One or the other must be present</p>
+            <div class="form-group col-4">
+                <label th:text="#{campaign.coupon.managerName}">Contact name</label>
+                <input class="form-control" th:field="*{campaignManagerName}"/>
+            </div>
+            <div class="form-group col-4">
+                <label th:text="#{campaign.coupon.managerEmail}">Contact email</label>
+                <input class="form-control" th:field="*{campaignManagerEmail}"/>
+            </div>
+            <div class="form-group col-4">
+                <label th:text="#{campaign.coupon.managerAddress}">Contact address</label>
+                <input class="form-control" th:field="*{campaignManagerAddress}"/>
+            </div>
 
-        <div th:replace="campaigns/campaignFragments :: submitCampaign">Submit campaign button</div>
-    </form>
+            <div th:replace="campaigns/campaignFragments :: submitCampaign">Submit campaign button</div>
+        </form>
+    </div>
 </div>
 <div th:replace="fragments :: footer">Footer</div>
 </body>

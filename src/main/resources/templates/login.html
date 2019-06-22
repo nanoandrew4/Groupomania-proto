@@ -35,7 +35,9 @@
             </div>
             <br>
             <div class="text-left">
-                <input class="btn btn-primary" th:value="#{login.login}" type="submit"/>
+                <center>
+                    <input class="btn btn-primary" th:value="#{login.login}" type="submit"/>
+                </center>
             </div>
         </form>
     </div>
@@ -44,8 +46,9 @@
 <script type="text/javascript">
 	    $("#password").password('toggle');
 
-</script>
 
+
+</script>
 <div th:replace="fragments :: footer">Footer</div>
 </body>
 </html>

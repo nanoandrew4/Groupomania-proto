@@ -23,6 +23,11 @@ public class CampaignValidator implements Validator {
 			errors.reject(errorCode);
 	}
 
+	public static void rejectIfNumberNullOrNegative(final Long value, final String errorCode, final Errors errors) {
+		if (value == null || value < 0)
+			errors.reject(errorCode);
+	}
+
 	public static void rejectIfNumberNullOrNegative(final Double value, final String errorCode, final Errors errors) {
 		if (value == null || value < 0)
 			errors.reject(errorCode);
@@ -56,10 +61,13 @@ public class CampaignValidator implements Validator {
 		rejectStringIfEmptyOrTooLong(campaign.getDescription(), "err.campaign.description", errors);
 		rejectStringIfEmptyOrTooLong(campaign.getType().toString(), "err.campaign.type", errors);
 		rejectIfNull(campaign.getOwner(), "err.campaign.owner", errors);
-		rejectIfNumberNullOrNegative(Double.valueOf(campaign.getQuantity()), "err.campaign.quantity", errors);
+		rejectIfNumberNullOrNegative(campaign.getQuantity(), "err.campaign.quantity", errors);
 		rejectIfNumberNullOrNegative(campaign.getOriginalPrice(), "err.campaign.originalPrice", errors);
 		rejectDateIfEmptyOrBeforeNow(campaign.getStartDate(), "err.campaign.startDate", errors);
 		rejectDateIfEmptyOrBeforeNow(campaign.getEndDate(), "err.campaign.endDate", errors);
+
+		if (campaign.getCampaignImage() != null && (campaign.getCampaignImage().getContentType() == null || !campaign.getCampaignImage().getContentType().contains("image")))
+			errors.reject("err.campaign.imageFormat");
 
 		if (campaign.getStartDate() != null && campaign.getEndDate() != null && campaign.getStartDate().isAfter(campaign.getEndDate().minus(1, ChronoUnit.DAYS)))
 			errors.reject("err.campaign.startDateAfterEndDate");

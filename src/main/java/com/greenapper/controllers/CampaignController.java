@@ -68,7 +68,7 @@ public class CampaignController {
 				return CAMPAIGN_UPDATE_SUCCESS_REDIRECT;
 			}
 		} catch (NoSuchBeanDefinitionException | NullPointerException e) {
-			LOG.error("", e);
+			LOG.error("An error occurred while trying to get the service for the supplied campaign", e);
 			errors.reject("err.campaign.type");
 		}
 		return CAMPAIGN_UPDATE_FORM;

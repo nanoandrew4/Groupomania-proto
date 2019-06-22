@@ -1,4 +1,4 @@
-package com.greenapper.handler;
+package com.greenapper.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class GlobalExceptionHandler extends AbstractHandlerExceptionResolver {
 	@Override
 	protected ModelAndView doResolveException
 			(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-		logger.error("", ex);
+		logger.error("An uncaught exception was intercepted: ", ex);
 		return null;
 	}
 }

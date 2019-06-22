@@ -26,8 +26,13 @@ public abstract class Campaign {
 
 	private String description;
 
-	@Lob
+	@Transient
 	private MultipartFile campaignImage;
+
+	@Transient
+	private String encodedCampaignImage;
+
+	private String campaignImageUrl;
 
 	private CampaignType type;
 
@@ -159,5 +164,13 @@ public abstract class Campaign {
 
 	public void setDiscountedPrice(Double discountedPrice) {
 		this.discountedPrice = discountedPrice;
+	}
+
+	public String getCampaignImageUrl() {
+		return campaignImageUrl;
+	}
+
+	public void setCampaignImageUrl(String campaignImageUrl) {
+		this.campaignImageUrl = campaignImageUrl;
 	}
 }
