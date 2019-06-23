@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:replace="fragments :: stdHead"></th:block>
+
     <title th:text="#{campaigns.overview.title}">Profile</title>
 
     <link href="../static/css/images.css" rel="stylesheet" th:href="@{/css/images.css}" type="text/css"/>
     <link href="../static/css/tables.css" rel="stylesheet" th:href="@{/css/tables.css}" type="text/css"/>
-
-    <th:block th:replace="fragments :: stdHead"></th:block>
 </head>
 <body>
 <div th:replace="fragments :: navbar">Navigation bar fragment</div>
@@ -19,14 +19,14 @@
     <table id="campaignManagementOverview" class="table table-hover table-striped table-responsive">
         <thead>
         <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Type</th>
-            <th>State</th>
-            <th width="15%">Campaign Image</th>
-            <th>Functions</th>
+            <th><label th:text="#{campaign.overview.table.header.title}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.description}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.startDate}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.endDate}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.type}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.state}"></label></th>
+            <th width="15%"><label th:text="#{campaign.overview.table.header.image}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.functions}"></label></th>
         </tr>
         </thead>
         <tbody>
@@ -42,21 +42,22 @@
             <td width="25%">
                 <center>
                     <form th:action="@{/campaign-manager/campaigns/} + ${campaign.id}" method="get">
-                        <input class="btn btn-link" th:value="#{campaign.overview.view}" type="submit"/>
+                        <input class="btn btn-link" th:value="#{campaign.overview.functions.view}" type="submit"/>
                     </form>
                     <form th:action="@{/campaign-manager/campaigns/update/} + ${campaign.id}" method="get"
                           th:if="${campaign.state.displayName} != 'Archived'">
-                        <input class="btn btn-link" th:value="#{campaign.overview.edit}" type="submit"/>
+                        <input class="btn btn-link" th:value="#{campaign.overview.functions.edit}" type="submit"/>
                     </form>
                     <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/' + ${campaign.state.displayName == 'Active' ? 'inactive' : 'active'}"
                           th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
                         <input class="btn btn-link"
-                               th:value="${campaign.state.displayName == 'Active'} ? #{campaign.overview.state.deactivate} : #{campaign.overview.state.activate}"
+                               th:value="${campaign.state.displayName == 'Active'} ? #{campaign.overview.functions.state.deactivate} : #{campaign.overview.functions.state.activate}"
                                type="submit"/>
                     </form>
                     <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/archived'"
                           th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
-                        <input class="btn btn-link" th:value="#{campaign.overview.state.archive}" type="submit"/>
+                        <input class="btn btn-link" th:value="#{campaign.overview.functions.state.archive}"
+                               type="submit"/>
                     </form>
                 </center>
             </td>

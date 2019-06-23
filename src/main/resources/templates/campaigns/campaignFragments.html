@@ -51,7 +51,7 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.image}">Campaign image</label>
-        <img th:if="*{campaignImageFileName} != null" th:src="@{~/images(fileName=*{campaignImageFileName})}"
+        <img th:if="*{campaignImageFileName} != ''" th:src="@{~/images(fileName=*{campaignImageFileName})}"
              class="img-thumbnail img-thumbnail-size">
         <input accept="image/x-png,image/jpeg,image/jpg" type="file" name="campaignImage"
                th:attrappend="disabled=${readonly != null} ? 'disabled' : ''"/>
@@ -95,17 +95,17 @@
         </select>
     </div>
     <div class="form-group col-4">
-        <label th:text="#{campaign.coupon.originalPrice}">Original price</label>
+        <label th:text="#{campaign.originalPrice}">Original price</label>
         <input class="form-control" th:field="*{originalPrice}"
                th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div class="form-group col-4">
-        <label th:text="#{campaign.coupon.percentDiscount}">Percent discount</label>
+        <label th:text="#{campaign.percentDiscount}">Percent discount</label>
         <input class="form-control" th:field="*{percentDiscount}"
                th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div class="form-group col-4">
-        <label th:text="#{campaign.coupon.discountedPrice}">Discounted price</label>
+        <label th:text="#{campaign.discountedPrice}">Discounted price</label>
         <input class="form-control" th:field="*{discountedPrice}"
                th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>

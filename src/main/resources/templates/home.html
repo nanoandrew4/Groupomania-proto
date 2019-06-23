@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{homepage.title}">Homepage</title>
-
     <th:block th:replace="fragments :: stdHead"></th:block>
+
+    <title th:text="#{homepage.title}">Homepage</title>
 </head>
 <body>
 <div th:replace="fragments :: navbar">Navigation bar fragment</div>
+<div class="col-lg-10 col-lg-offset-1 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+    <table id="campaignsOverview" class="table table-hover table-striped table-responsive">
+        <thead>
+        <tr>
+            <th><label th:text="#{campaign.overview.table.header.title}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.description}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.startDate}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.endDate}"></label></th>
+            <th><label th:text="#{campaign.overview.table.header.state}"></label></th>
+            <th width="15%"><label th:text="#{campaign.overview.table.header.image}"></label></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="campaign : ${campaigns}">
+            <td th:text="${campaign.title}"></td>
+            <td th:text="${campaign.description}"></td>
+            <td th:text="${campaign.startDate}"></td>
+            <td th:text="${campaign.endDate}"></td>
+            <td th:text="${campaign.state.displayName}"></td>
+            <td><img class="img-thumbnail" th:if="${campaign.campaignImageFileName} != null"
+                     th:src="@{~/images(fileName=${campaign.campaignImageFileName})}" src=""/></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

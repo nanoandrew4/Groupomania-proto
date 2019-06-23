@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:replace="fragments :: stdHead"></th:block>
+
     <title th:text="#{campaign.offer.title}">Profile</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"
             type="text/javascript"></script>
-
-    <th:block th:replace="fragments :: stdHead"></th:block>
 </head>
 <body>
 <div th:replace="fragments :: navbar">Navigation bar fragment</div>

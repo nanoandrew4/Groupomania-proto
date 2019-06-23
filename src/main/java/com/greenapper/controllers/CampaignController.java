@@ -1,5 +1,6 @@
 package com.greenapper.controllers;
 
+import com.greenapper.enums.CampaignState;
 import com.greenapper.enums.CampaignType;
 import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.services.CampaignService;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Controller
 public class CampaignController {
@@ -60,9 +64,8 @@ public class CampaignController {
 			else
 				campaignService.editCampaign(campaign, errors);
 
-			if (!errors.hasErrors()) {
+			if (!errors.hasErrors())
 				return CAMPAIGN_CREATION_SUCCESS_REDIRECT;
-			}
 		} catch (NoSuchBeanDefinitionException | NullPointerException e) {
 			LOG.error("An error occurred while trying to get the service for the supplied campaign", e);
 			errors.reject("err.campaign.type");
@@ -76,7 +79,12 @@ public class CampaignController {
 
 	@GetMapping(CAMPAIGNS_OVERVIEW_URI)
 	public String getAllCampaigns(final Model model) {
-		model.addAttribute("campaigns", campaignService.getAllCampaigns());
+		final List<Campaign> campaigns = campaignService.getAllCampaigns();
+
+		campaigns.removeIf(campaign -> campaign.getState() == CampaignState.INACTIVE);
+		campaigns.removeIf(campaign -> campaign.isShowAfterExpiration() && campaign.getEndDate().isBefore(LocalDate.now().plus(4, ChronoUnit.DAYS)));
+
+		model.addAttribute("campaigns", campaigns);
 		return "home";
 	}
 }
