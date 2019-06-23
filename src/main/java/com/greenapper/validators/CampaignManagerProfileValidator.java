@@ -35,5 +35,8 @@ public class CampaignManagerProfileValidator implements Validator {
 			errors.reject("err.profile.name");
 		if (updatedProfile.getEmail() == null || updatedProfile.getEmail().trim().isEmpty() || !VALID_EMAIL_ADDRESS_REGEX.matcher(updatedProfile.getEmail()).find())
 			errors.reject("err.profile.email");
+		if (updatedProfile.getProfileImage() != null && (updatedProfile.getProfileImage().getContentType() == null ||
+														 !updatedProfile.getProfileImage().getContentType().contains("image")))
+			errors.reject("err.profile.imageFormat");
 	}
 }

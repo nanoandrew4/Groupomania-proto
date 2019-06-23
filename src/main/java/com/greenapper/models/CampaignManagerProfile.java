@@ -3,7 +3,6 @@ package com.greenapper.models;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.io.IOException;
 
 @Entity(name = "CampaignManagerProfile")
 @Table(name = "CampaignManagerProfile")
@@ -21,8 +20,10 @@ public class CampaignManagerProfile {
 
 	private String address;
 
-	@Lob
-	private byte[] profileImage;
+	@Transient
+	private MultipartFile profileImage;
+
+	private String profileImageFileName;
 
 	public Long getId() {
 		return id;
@@ -64,15 +65,19 @@ public class CampaignManagerProfile {
 		this.address = address;
 	}
 
-	public byte[] getProfileImage() {
+	public MultipartFile getProfileImage() {
 		return profileImage;
 	}
 
 	public void setProfileImage(MultipartFile profileImage) {
-		try {
-			this.profileImage = profileImage.getBytes();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.profileImage = profileImage;
+	}
+
+	public String getProfileImageFileName() {
+		return profileImageFileName;
+	}
+
+	public void setProfileImageFileName(String profileImageFileName) {
+		this.profileImageFileName = profileImageFileName;
 	}
 }

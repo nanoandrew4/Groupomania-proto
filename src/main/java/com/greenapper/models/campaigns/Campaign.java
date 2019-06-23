@@ -32,7 +32,7 @@ public abstract class Campaign {
 	@Transient
 	private String encodedCampaignImage;
 
-	private String campaignImageUrl;
+	private String campaignImageFileName;
 
 	private CampaignType type;
 
@@ -166,11 +166,11 @@ public abstract class Campaign {
 		this.discountedPrice = discountedPrice;
 	}
 
-	public String getCampaignImageUrl() {
-		return campaignImageUrl;
+	public String getCampaignImageFileName() {
+		return campaignImageFileName;
 	}
 
-	public void setCampaignImageUrl(String campaignImageUrl) {
-		this.campaignImageUrl = campaignImageUrl;
+	public void setCampaignImageFileName(String campaignImageFileName) {
+		this.campaignImageFileName = campaignImageFileName;
 	}
 }

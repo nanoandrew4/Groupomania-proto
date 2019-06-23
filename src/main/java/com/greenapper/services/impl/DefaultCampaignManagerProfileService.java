@@ -5,6 +5,7 @@ import com.greenapper.models.CampaignManagerProfile;
 import com.greenapper.repositories.CampaignManagerProfileRepository;
 import com.greenapper.repositories.CampaignManagerRepository;
 import com.greenapper.services.CampaignManagerProfileService;
+import com.greenapper.services.FileSystemStorageService;
 import com.greenapper.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class DefaultCampaignManagerProfileService implements CampaignManagerProf
 
 	@Autowired
 	private SessionService sessionService;
+
+	@Autowired
+	private FileSystemStorageService fileSystemStorageService;
 
 	@Autowired
 	private CampaignManagerRepository campaignManagerRepository;
@@ -41,6 +45,10 @@ public class DefaultCampaignManagerProfileService implements CampaignManagerProf
 			final Optional<CampaignManager> campaignManager = campaignManagerRepository.findById(sessionService.getSessionUser().getId());
 			if (campaignManager.isPresent()) {
 				updatedProfile.setId(campaignManager.get().getId());
+
+				if (updatedProfile.getProfileImage() != null)
+					updatedProfile.setProfileImageFileName(fileSystemStorageService.saveImage(updatedProfile.getProfileImage()));
+
 				campaignManager.get().setCampaignManagerProfile(updatedProfile);
 				campaignManagerRepository.save(campaignManager.get());
 				campaignManagerProfileRepository.save(updatedProfile);

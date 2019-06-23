@@ -9,8 +9,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
-
-    <link href="../static/css/logo.css" rel="stylesheet" th:href="@{/css/logo.css}" type="text/css"/>
 </head>
 
 <body>
@@ -35,12 +33,12 @@
             </div>
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="text-center col col-lg-4">
-                <img alt="GroupoMania" style="max-height:100%;max-width:80%" th:src="@{/img/logo.png}"
+                <img alt="GroupoMania" th:src="@{/img/logo.png}"
                      title="GroupoMania"/>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="col col-lg-4" th:unless="${#httpServletRequest.requestURI.equals('/login')}">
+            <div class="col col-lg-4" th:unless="${#httpServletRequest.requestURI.contains('/login')}">
                 <div id="loginButtons">
                     <ul class="nav navbar-nav navbar-right">
                         <li sec:authorize="isAnonymous()">
