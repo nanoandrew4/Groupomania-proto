@@ -2,14 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{profile.title}">Profile</title>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
-    <link href='https://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css'/>
-
     <link href="../static/css/images.css" rel="stylesheet" th:href="@{/css/images.css}" type="text/css"/>
+
+    <th:block th:replace="fragments :: stdHead"></th:block>
 </head>
 <body>
 <div th:replace="fragments :: navbar">Navigation bar fragment</div>

@@ -2,18 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="#{login.title}">Sign in</title>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"
             type="text/javascript"></script>
 
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
-    <link href='https://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css'/>
-
+    <th:block th:replace="fragments :: stdHead"></th:block>
 </head>
 <body>
 <div th:replace="fragments :: navbar">Navigation bar fragment</div>
