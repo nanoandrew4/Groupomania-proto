@@ -19,7 +19,7 @@
     <center>
         <label th:text="#{campaign.type}">Campaign type</label>
         <select id="type" name="type" onchange="this.form.submit()"
-                th:attrappend="disabled=${readonly == true} ? 'disabled' : ''">
+                th:attrappend="disabled=${campaign.id != null} ? 'disabled' : ''">
             <option th:each="campaignType : ${T(com.greenapper.enums.CampaignType).values()}"
                     th:selected="${campaignType.displayName} == *{type.displayName}"
                     th:text="${campaignType.displayName}"
@@ -33,27 +33,34 @@
     <div hidden="hidden">
         <input class="form-control" th:field="*{id}"/>
     </div>
+    <div hidden="hidden">
+        <input class="form-control" th:field="*{state}"/>
+    </div>
+    <div hidden="hidden">
+        <input class="form-control" th:field="*{campaignImageFileName}"/>
+    </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.title}">Title</label>
         <input autofocus="autofocus" class="form-control" th:field="*{title}"
-               th:attrappend="readonly=${readonly} ? 'readonly' : ''"/>
+               th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.description}">Description</label>
-        <input class="form-control" th:field="*{description}" th:attrappend="readonly=${readonly} ? 'readonly' : ''"/>
+        <input class="form-control" th:field="*{description}"
+               th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.image}">Campaign image</label>
         <img th:if="*{campaignImageFileName} != null" th:src="@{~/images(fileName=*{campaignImageFileName})}"
              class="img-thumbnail img-thumbnail-size">
         <input accept="image/x-png,image/jpeg,image/jpg" type="file" name="campaignImage"
-               th:attrappend="disabled=${readonly} ? 'disabled' : ''"/>
+               th:attrappend="disabled=${readonly != null} ? 'disabled' : ''"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.startDate}">Campaign start date</label>
         <div class="input-group date" data-date-format="dd-mm-yyyy">
             <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{startDate}" type="text"
-                   th:attrappend="readonly=${readonly} ? 'readonly' : ''">
+                   th:attrappend="readonly=${readonly != null} ? 'readonly' : ''">
             <div class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </div>
@@ -63,7 +70,7 @@
         <label th:text="#{campaign.endDate}">Campaign end date</label>
         <div class="input-group date" data-date-format="dd-mm-yyyy">
             <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{endDate}" type="text"
-                   th:attrappend="readonly=${readonly} ? 'readonly' : ''">
+                   th:attrappend="readonly=${readonly != null} ? 'readonly' : ''">
             <div class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </div>
@@ -71,15 +78,16 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.quantity}">Available quantity</label>
-        <input class="form-control" th:field="*{quantity}" th:attrappend="readonly=${readonly} ? 'readonly' : ''"/>
+        <input class="form-control" th:field="*{quantity}"
+               th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div hidden="hidden">
-        <input class="form-control" th:field="*{type}" th:attrappend="readonly=${readonly} ? 'readonly' : ''"/>
+        <input class="form-control" th:field="*{type}" th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.showAfterExpiration}">Show after expiration</label>
         <select id="campaignExpirationDropdown" name="campaignExpirationDropdown" th:field="*{showAfterExpiration}"
-                th:attrappend="disabled=${readonly} ? 'disabled' : ''">
+                th:attrappend="disabled=${readonly != null} ? 'disabled' : ''">
             <option id="showAfterExpiration" th:text="#{campaign.showAfterExpiration.true}"
                     th:value="true"></option>
             <option id="noShowAfterExpiration" th:text="#{campaign.showAfterExpiration.false}"
@@ -88,17 +96,18 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.coupon.originalPrice}">Original price</label>
-        <input class="form-control" th:field="*{originalPrice}" th:attrappend="readonly=${readonly} ? 'readonly' : ''"/>
+        <input class="form-control" th:field="*{originalPrice}"
+               th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.coupon.percentDiscount}">Percent discount</label>
         <input class="form-control" th:field="*{percentDiscount}"
-               th:attrappend="readonly=${readonly} ? 'readonly' : ''"/>
+               th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.coupon.discountedPrice}">Discounted price</label>
         <input class="form-control" th:field="*{discountedPrice}"
-               th:attrappend="readonly=${readonly} ? 'readonly' : ''"/>
+               th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
     <p>** One or the other must be present</p>
 

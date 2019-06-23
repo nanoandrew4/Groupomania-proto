@@ -29,9 +29,6 @@ public abstract class Campaign {
 	@Transient
 	private MultipartFile campaignImage;
 
-	@Transient
-	private String encodedCampaignImage;
-
 	private String campaignImageFileName;
 
 	private CampaignType type;

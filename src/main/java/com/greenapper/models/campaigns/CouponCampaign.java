@@ -1,6 +1,7 @@
 package com.greenapper.models.campaigns;
 
 import com.greenapper.enums.CampaignType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,8 +19,10 @@ public class CouponCampaign extends Campaign {
 
 	private String campaignManagerAddress;
 
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate couponStartDate;
 
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private LocalDate couponEndDate;
 
 	public CouponCampaign() {
