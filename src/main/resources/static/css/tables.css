@@ -1,0 +1,15 @@
+table#campaignManagementOverview tr td a.button {
+    display: none;
+}
+
+table#campaignManagementOverview tr:hover td a.button {
+    display:inline-block;
+}
+
+table#campaignManagementOverview tr td form {
+    display: none;
+}
+
+table#campaignManagementOverview tr:hover td form {
+    display:inline-block;
+}

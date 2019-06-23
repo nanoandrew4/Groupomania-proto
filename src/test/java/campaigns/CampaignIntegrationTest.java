@@ -58,7 +58,7 @@ public class CampaignIntegrationTest {
 		final Model model = new BindingAwareModelMap();
 		final String ret = campaignController.getCampaignUpdateForm(model, "");
 
-		assertEquals(CampaignController.CAMPAIGN_DEFAULT_REDIRECTION, ret);
+		assertEquals(CampaignController.CAMPAIGN_CREATION_DEFAULT_REDIRECTION, ret);
 	}
 
 	@Test
@@ -233,13 +233,13 @@ public class CampaignIntegrationTest {
 		final String ret = campaignController.updateCampaign(campaign, errors);
 
 		assertFalse(errors.hasErrors());
-		assertEquals(CampaignController.CAMPAIGN_UPDATE_SUCCESS_REDIRECT, ret);
+		assertEquals(CampaignController.CAMPAIGN_CREATION_SUCCESS_REDIRECT, ret);
 
 		assertFalse(((CampaignManager) sessionService.getSessionUser()).getCampaigns().isEmpty());
 	}
 
 	private void performStandardKOAssertions(final Errors errors, final List<String> expectedErrorCodes, final String actualReturnString) {
-		assertEquals(CampaignController.CAMPAIGN_UPDATE_FORM, actualReturnString);
+		assertEquals(CampaignController.getFormForCampaignType("offer"), actualReturnString);
 		assertEquals(expectedErrorCodes.size(), errors.getErrorCount());
 		for (String errorCode : expectedErrorCodes)
 			assertTrue(errors.getAllErrors().stream().map(DefaultMessageSourceResolvable::getCode).anyMatch(errorCode::equals));

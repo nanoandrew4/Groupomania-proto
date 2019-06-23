@@ -18,5 +18,7 @@ public interface CampaignService {
 
 	List<Campaign> getAllCampaignsForCurrentUser();
 
+	List<Campaign> getAllCampaigns();
+
 	boolean isCampaignArchived(final Long id);
 }

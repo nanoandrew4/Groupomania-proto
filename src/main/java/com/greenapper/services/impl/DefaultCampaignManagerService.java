@@ -3,6 +3,7 @@ package com.greenapper.services.impl;
 import com.greenapper.config.SecurityConfig;
 import com.greenapper.models.CampaignManager;
 import com.greenapper.models.PasswordUpdate;
+import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.repositories.CampaignManagerRepository;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.SessionService;
@@ -12,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +45,19 @@ public class DefaultCampaignManagerService implements CampaignManagerService {
 			sessionUser.setPasswordChangeRequired(false);
 			campaignManagerRepository.save(sessionUser);
 		}
+	}
+
+	@Override
+	public void addCampaignToCurrentUser(final Campaign campaign) {
+		final CampaignManager campaignManager = getSessionCampaignManager();
+		campaignManager.getCampaigns().removeIf(campaign1 -> campaign1.getId().equals(campaign.getId()));
+		campaignManager.getCampaigns().add(campaign);
+		campaignManagerRepository.save(campaignManager);
+	}
+
+	@Override
+	public List<Campaign> getCampaigns() {
+		return getSessionCampaignManager().getCampaigns();
 	}
 
 	@Override

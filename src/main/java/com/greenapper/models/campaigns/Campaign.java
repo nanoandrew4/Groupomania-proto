@@ -139,7 +139,8 @@ public abstract class Campaign {
 	}
 
 	public void setState(CampaignState state) {
-		this.state = state;
+		if (this.state != CampaignState.ARCHIVED)
+			this.state = state;
 	}
 
 	public Double getOriginalPrice() {

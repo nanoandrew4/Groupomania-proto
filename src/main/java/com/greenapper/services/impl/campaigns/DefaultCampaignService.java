@@ -22,7 +22,7 @@ public abstract class DefaultCampaignService implements CampaignService {
 	private CampaignRepository campaignRepository;
 
 	@Autowired
-	private CampaignManagerService userService;
+	private CampaignManagerService campaignManagerService;
 
 	@Autowired
 	private SessionService sessionService;
@@ -50,6 +50,8 @@ public abstract class DefaultCampaignService implements CampaignService {
 
 	@Override
 	public void editCampaign(final Campaign campaign, final Errors errors) {
+		campaign.setOwner(getSessionCampaignManager());
+
 		validateCampaign(campaign, errors);
 		if (!errors.hasErrors())
 			saveCampaign(campaign);
@@ -64,6 +66,11 @@ public abstract class DefaultCampaignService implements CampaignService {
 	}
 
 	@Override
+	public List<Campaign> getAllCampaigns() {
+		return campaignRepository.findAll();
+	}
+
+	@Override
 	public List<Campaign> getAllCampaignsForCurrentUser() {
 		return getSessionCampaignManager().getCampaigns();
 	}
@@ -74,10 +81,10 @@ public abstract class DefaultCampaignService implements CampaignService {
 	}
 
 	private void saveCampaign(final Campaign campaign) {
-		if (campaign.getCampaignImage() != null)
-			campaign.setCampaignImageFileName(fileSystemStorageService.saveImage(campaign.getCampaignImage()));
+		campaign.setCampaignImageFileName(fileSystemStorageService.saveImage(campaign.getCampaignImage(), campaign.getCampaignImageFileName()));
 
 		campaignRepository.save(campaign);
+		campaignManagerService.addCampaignToCurrentUser(campaign);
 	}
 
 	private CampaignManager getSessionCampaignManager() {

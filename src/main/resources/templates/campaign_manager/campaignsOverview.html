@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{campaigns.overview.title}">Profile</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css'/>
+
+    <link href="../static/css/images.css" rel="stylesheet" th:href="@{/css/images.css}" type="text/css"/>
+    <link href="../static/css/tables.css" rel="stylesheet" th:href="@{/css/tables.css}" type="text/css"/>
+</head>
+<body>
+<div th:replace="fragments :: navbar">Navigation bar fragment</div>
+
+<div class="container body-content">
+    <form action="#" th:action="@{${T(com.greenapper.controllers.CampaignController).CAMPAIGN_CREATION_URI}}"
+          method="get">
+        <input class="btn btn-default" th:value="#{campaign.overview.create.button}" type="submit"/>
+    </form>
+    <table id="campaignManagementOverview" class="table table-hover table-striped table-responsive">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Type</th>
+            <th>State</th>
+            <th width="15%">Campaign Image</th>
+            <th>Functions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="campaign : ${campaigns}">
+            <td th:text="${campaign.title}"></td>
+            <td th:text="${campaign.description}"></td>
+            <td th:text="${campaign.startDate}"></td>
+            <td th:text="${campaign.endDate}"></td>
+            <td th:text="${campaign.type.displayName}"></td>
+            <td th:text="${campaign.state.displayName}"></td>
+            <td><img class="img-thumbnail" th:if="${campaign.campaignImageFileName} != null"
+                     th:src="@{~/images(fileName=${campaign.campaignImageFileName})}" src=""/></td>
+            <td width="25%">
+                <center>
+                    <form th:action="@{/campaign-manager/campaigns/} + ${campaign.id}" method="get">
+                        <input class="btn btn-link" th:value="#{campaign.overview.view}" type="submit"/>
+                    </form>
+                    <form th:action="@{/campaign-manager/campaigns/update/} + ${campaign.id}" method="get"
+                          th:if="${campaign.state.displayName} != 'Archived'">
+                        <input class="btn btn-link" th:value="#{campaign.overview.edit}" type="submit"/>
+                    </form>
+                    <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/' + ${campaign.state.displayName == 'Active' ? 'inactive' : 'active'}"
+                          th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
+                        <input class="btn btn-link"
+                               th:value="${campaign.state.displayName == 'Active'} ? #{campaign.overview.state.deactivate} : #{campaign.overview.state.activate}"
+                               type="submit"/>
+                    </form>
+                    <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/archived'"
+                          th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
+                        <input class="btn btn-link" th:value="#{campaign.overview.state.archive}" type="submit"/>
+                    </form>
+                </center>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

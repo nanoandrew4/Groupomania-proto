@@ -66,7 +66,7 @@ public class CampaignValidator implements Validator {
 		rejectDateIfEmptyOrBeforeNow(campaign.getStartDate(), "err.campaign.startDate", errors);
 		rejectDateIfEmptyOrBeforeNow(campaign.getEndDate(), "err.campaign.endDate", errors);
 
-		if (campaign.getCampaignImage() != null && (campaign.getCampaignImage().getContentType() == null || !campaign.getCampaignImage().getContentType().contains("image")))
+		if (campaign.getCampaignImage().getSize() > 0 && (campaign.getCampaignImage().getContentType() == null || !campaign.getCampaignImage().getContentType().contains("image")))
 			errors.reject("err.campaign.imageFormat");
 
 		if (campaign.getStartDate() != null && campaign.getEndDate() != null && campaign.getStartDate().isAfter(campaign.getEndDate().minus(1, ChronoUnit.DAYS)))

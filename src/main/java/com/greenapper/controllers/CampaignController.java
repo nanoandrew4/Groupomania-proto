@@ -21,41 +21,37 @@ import java.lang.reflect.InvocationTargetException;
 public class CampaignController {
 
 	@Autowired
+	private CampaignService campaignService;
+
+	@Autowired
 	private ApplicationContext applicationContext;
 
 	private Logger LOG = LoggerFactory.getLogger(CampaignController.class);
 
 	private static final String ROOT_URI = "/campaigns";
 
-	public static final String CAMPAIGNS_OVERVIEW_URI = ROOT_URI + "/overview";
+	public static final String CAMPAIGNS_OVERVIEW_URI = ROOT_URI;
 
-	public static final String CAMPAIGN_UPDATE_URI = ROOT_URI;
+	public static final String CAMPAIGN_CREATION_URI = ROOT_URI + "/create";
 
-	public static final String CAMPAIGN_UPDATE_FORM = "campaigns/offerCampaign";
+	public static final String CAMPAIGN_CREATION_DEFAULT_REDIRECTION = "redirect:" + CAMPAIGN_CREATION_URI + "?type=" + CampaignType.OFFER.displayName;
 
-	public static final String CAMPAIGN_DEFAULT_REDIRECTION = "redirect:" + CAMPAIGN_UPDATE_URI + "?type=" + CampaignType.OFFER.displayName;
+	public static final String CAMPAIGN_CREATION_SUCCESS_REDIRECT = "redirect:" + CampaignManagerController.CAMPAIGNS_OVERVIEW_URI;
 
-	public static final String CAMPAIGN_UPDATE_SUCCESS_REDIRECT = "redirect:" + CAMPAIGNS_OVERVIEW_URI;
-
-	@GetMapping(CAMPAIGNS_OVERVIEW_URI)
-	public String getCampaignManagerOverview() {
-		return "campaigns/overview";
-	}
-
-	@GetMapping(CAMPAIGN_UPDATE_URI)
+	@GetMapping(CAMPAIGN_CREATION_URI)
 	public String getCampaignUpdateForm(final Model model, @RequestParam(required = false) final String type) {
 		try {
 			model.addAttribute("campaign", Class.forName(Campaign.class.getPackage().getName() + "." + type + "Campaign").getConstructor().newInstance());
-			return "campaigns/" + type.toLowerCase() + "Campaign";
+			return getFormForCampaignType(type);
 		} catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			if (type != null)
 				LOG.error("Could not create Campaign model from type: \'" + type + "\', will use default redirect...");
 		}
 
-		return CAMPAIGN_DEFAULT_REDIRECTION;
+		return CAMPAIGN_CREATION_DEFAULT_REDIRECTION;
 	}
 
-	@PostMapping(CAMPAIGN_UPDATE_URI)
+	@PostMapping(CAMPAIGN_CREATION_URI)
 	public String updateCampaign(final Campaign campaign, final Errors errors) {
 		try {
 			final CampaignService campaignService = (CampaignService) applicationContext.getBean(campaign.getType().displayName.toLowerCase() + "CampaignService");
@@ -65,12 +61,22 @@ public class CampaignController {
 				campaignService.editCampaign(campaign, errors);
 
 			if (!errors.hasErrors()) {
-				return CAMPAIGN_UPDATE_SUCCESS_REDIRECT;
+				return CAMPAIGN_CREATION_SUCCESS_REDIRECT;
 			}
 		} catch (NoSuchBeanDefinitionException | NullPointerException e) {
 			LOG.error("An error occurred while trying to get the service for the supplied campaign", e);
 			errors.reject("err.campaign.type");
 		}
-		return CAMPAIGN_UPDATE_FORM;
+		return getFormForCampaignType(campaign.getType().displayName);
+	}
+
+	public static String getFormForCampaignType(final String type) {
+		return "campaigns/" + type.toLowerCase() + "Campaign";
+	}
+
+	@GetMapping(CAMPAIGNS_OVERVIEW_URI)
+	public String getAllCampaigns(final Model model) {
+		model.addAttribute("campaigns", campaignService.getAllCampaigns());
+		return "home";
 	}
 }

@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -44,26 +45,32 @@ public class DefaultFileSystemStorageService implements FileSystemStorageService
 	}
 
 	@Override
-	public String saveImage(MultipartFile image) {
-		final String contentType = Objects.requireNonNull(image.getContentType()).replace("image/", "");
-		try {
-			String hashedFileName = new String(Base64.getEncoder().encode(md.digest(image.getBytes()))).replaceAll("/", "?");
-			hashedFileName += "." + contentType;
+	public String saveImage(final MultipartFile image, final String originalFileName) {
+		if (image.getSize() > 0) {
+			final String contentType = Objects.requireNonNull(image.getContentType()).replace("image/", "");
+			String hashedFileName = "";
+			try {
+				hashedFileName = new String(Base64.getEncoder().encode(md.digest(image.getBytes()))).replaceAll("/", "?");
+				hashedFileName += "." + contentType;
 
-			final String relativeStoragePath = getSessionUsernameHash() + "/" + hashedFileName;
-			final File outputFile = new File(rootStorageDir + relativeStoragePath);
+				final String relativeStoragePath = getSessionUsernameHash() + "/" + hashedFileName;
+				final File outputFile = new File(rootStorageDir + relativeStoragePath);
 
-			Files.createDirectories(Paths.get(outputFile.getAbsolutePath()));
+				Files.createDirectories(Paths.get(outputFile.getAbsolutePath()));
 
-			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(image.getBytes());
-			BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
-			ImageIO.write(bufferedImage, contentType, outputFile);
-			return hashedFileName;
-		} catch (IOException e) {
-			LOG.error("Reading bytes from image with name + \'" + image.getName() + "\' and user \'" + sessionService.getSessionUser().getUsername() + "\' failed");
+				ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(image.getBytes());
+				BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
+				ImageIO.write(bufferedImage, contentType, outputFile);
+				LOG.info("Stored file with name: " + hashedFileName);
+				return hashedFileName;
+			} catch (FileAlreadyExistsException e) {
+				return hashedFileName;
+			} catch (IOException e) {
+				LOG.error("Reading bytes from image with name + \'" + image.getName() + "\' and user \'" + sessionService.getSessionUser().getUsername() + "\' failed", e);
+			}
 		}
 
-		return null;
+		return originalFileName;
 	}
 
 	@Override

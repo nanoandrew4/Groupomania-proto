@@ -19,13 +19,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/home", "/login").permitAll()
+				.antMatchers("/campaigns", "/login").permitAll()
 				.antMatchers("/campaign-manager/**").access("hasRole('CAMPAIGN_MANAGER')")
-				.antMatchers("/campaigns").access("hasRole('CAMPAIGN_MANAGER')")
+				.antMatchers("/campaigns/**").access("hasRole('CAMPAIGN_MANAGER')")
 				.and()
 				.formLogin().loginPage("/login").loginProcessingUrl("/login").failureUrl("/login-error")
 				.and()
-				.logout().permitAll().logoutSuccessUrl("/home");
+				.logout().logoutSuccessUrl("/").permitAll();
 	}
 
 	@Bean
