@@ -28,6 +28,7 @@
                 <input class="form-control" th:field="*{couponDescription}"
                        th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
             </div>
+            <label th:text="#{campaign.coupon.percentDiscountOrDiscountedPriceOrDescription}"></label>
             <div class="form-group col-4">
                 <label th:text="#{campaign.coupon.couponStartDate}">Coupon start date</label>
                 <div class="input-group date" data-date-format="dd-mm-yyyy">

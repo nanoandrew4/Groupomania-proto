@@ -22,7 +22,7 @@
             <form th:replace="fragments :: validationErrors">Generic campaign fragment</form>
 
             <div th:replace="campaigns/campaignFragments :: campaignFields">Generic campaign fields</div>
-
+            <label th:text="#{campaign.offer.percentDiscountOrDiscountedPrice}"></label>
 
             <div th:replace="campaigns/campaignFragments :: submitCampaign">Submit campaign button</div>
         </form>
