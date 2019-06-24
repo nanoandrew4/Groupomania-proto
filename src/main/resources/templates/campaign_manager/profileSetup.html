@@ -3,7 +3,7 @@
 <head>
     <th:block th:replace="fragments :: stdHead"></th:block>
 
-    <title th:text="#{profile.update.title}">Profile</title>
+    <title th:text="#{profile.title}">Profile</title>
     <link href="../static/css/images.css" rel="stylesheet" th:href="@{/css/images.css}" type="text/css"/>
 </head>
 <body>
@@ -37,7 +37,8 @@
                 <div class="form-group col-4">
                     <label th:text="#{profile.update.image}">Profile picture</label>
                     <br/>
-                    <img th:if="*{profileImageFileName} != ''" src="" alt="Profile Image"
+                    <img th:if="*{profileImageFileName != null && profileImageFileName != ''}" src=""
+                         alt="Profile Image"
                          th:src="@{~/images(fileName=*{profileImageFileName})}"
                          class="img-thumbnail img-thumbnail-size"/>
                     <input accept="image/x-png,image/jpeg,image/jpg" type="file" name="profileImage"/>

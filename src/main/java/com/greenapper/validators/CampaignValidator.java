@@ -90,9 +90,6 @@ public class CampaignValidator implements Validator {
 		if (campaign.getCampaignImage().getSize() > 0 && (campaign.getCampaignImage().getContentType() == null || !campaign.getCampaignImage().getContentType().contains("image")))
 			errors.reject("err.campaign.imageFormat");
 
-		if ((campaign.getDiscountedPrice() == null || campaign.getDiscountedPrice() < 0) && (campaign.getPercentDiscount() == null || campaign.getPercentDiscount() < 0))
-			errors.reject("err.campaign.discountedPriceOrPercent");
-
 		if (campaign.getDiscountedPrice() != null && campaign.getOriginalPrice() != null && campaign.getDiscountedPrice() > campaign.getOriginalPrice())
 			errors.reject("err.campaign.discountedPriceLargerThanOriginal");
 

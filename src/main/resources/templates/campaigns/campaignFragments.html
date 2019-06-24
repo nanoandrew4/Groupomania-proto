@@ -51,7 +51,8 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.image}">Campaign image</label>
-        <img th:if="*{campaignImageFileName} != ''" th:src="@{~/images(fileName=*{campaignImageFileName})}"
+        <img th:if="*{campaignImageFileName != null && campaignImageFileName != ''}"
+             th:src="@{~/images(fileName=*{campaignImageFileName})}"
              class="img-thumbnail img-thumbnail-size">
         <input accept="image/x-png,image/jpeg,image/jpg" type="file" name="campaignImage"
                th:attrappend="disabled=${readonly != null} ? 'disabled' : ''"/>

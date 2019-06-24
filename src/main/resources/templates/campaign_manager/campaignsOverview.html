@@ -37,9 +37,10 @@
             <td th:text="${campaign.endDate}"></td>
             <td th:text="${campaign.type.displayName}"></td>
             <td th:text="${campaign.state.displayName}"></td>
-            <td><img class="img-thumbnail" th:if="${campaign.campaignImageFileName} != null"
+            <td><img class="img-thumbnail"
+                     th:if="${campaign.campaignImageFileName != null && campaign.campaignImageFileName != ''}"
                      th:src="@{~/images(fileName=${campaign.campaignImageFileName})}" src=""/></td>
-            <td width="25%">
+            <td width="28%">
                 <center>
                     <form th:action="@{/campaign-manager/campaigns/} + ${campaign.id}" method="get">
                         <input class="btn btn-link" th:value="#{campaign.overview.functions.view}" type="submit"/>

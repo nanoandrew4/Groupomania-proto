@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@Component
+@Component
 @Order(1)
 public class PostRegistrationFilter implements Filter {
 
@@ -42,7 +43,7 @@ public class PostRegistrationFilter implements Filter {
 	private boolean allowRedirect(final HttpServletRequest request, final String redirectUri) {
 		final String requestUri = request.getRequestURI();
 		return "GET".equals(request.getMethod()) &&
-			   (!(requestUri.equals(redirectUri) || requestUri.equals("/login") || requestUri.equals("/logout")));
+			   (!(requestUri.equals(redirectUri) || requestUri.equals("/login") || requestUri.equals("/logout") || requestUri.contains("img")));
 	}
 
 	private String checkCampaignManagerData(final CampaignManager sessionCampaignManager) {

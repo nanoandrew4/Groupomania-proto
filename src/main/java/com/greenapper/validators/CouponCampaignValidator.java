@@ -33,5 +33,8 @@ public class CouponCampaignValidator implements Validator {
 		CampaignValidator.rejectDateIfEqualOrAfterOtherDate(couponCampaign.getCouponStartDate(), couponCampaign.getCouponEndDate(), "err.campaign.coupon.startDateAfterEndDate", errors);
 		CampaignValidator.rejectDateIfBeforeOtherDate(couponCampaign.getCouponStartDate(), couponCampaign.getStartDate(), "err.campaign.coupon.couponStartDateBeforeCampaign", errors);
 		CampaignValidator.rejectDateIfAfterOtherDate(couponCampaign.getCouponEndDate(), couponCampaign.getEndDate(), "err.campaign.coupon.couponEndDateBeforeCampaign", errors);
+
+		if (couponCampaign.getDiscountedPrice() == null && couponCampaign.getPercentDiscount() == null && (couponCampaign.getCouponDescription() == null || couponCampaign.getCouponDescription().trim().isEmpty()))
+			errors.reject("err.campaign.coupon.discountedPriceOrPercentOrDescription");
 	}
 }

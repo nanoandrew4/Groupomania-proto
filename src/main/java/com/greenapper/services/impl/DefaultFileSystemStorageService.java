@@ -48,12 +48,12 @@ public class DefaultFileSystemStorageService implements FileSystemStorageService
 	public String saveImage(final MultipartFile image, final String originalFileName) {
 		if (image.getSize() > 0) {
 			final String contentType = Objects.requireNonNull(image.getContentType()).replace("image/", "");
-			String hashedFileName = "";
+			String relativeStoragePath = "";
 			try {
-				hashedFileName = new String(Base64.getEncoder().encode(md.digest(image.getBytes()))).replaceAll("/", "?");
+				String hashedFileName = new String(Base64.getEncoder().encode(md.digest(image.getBytes()))).replaceAll("/", "?");
 				hashedFileName += "." + contentType;
 
-				final String relativeStoragePath = getSessionUsernameHash() + "/" + hashedFileName;
+				relativeStoragePath = getSessionUsernameHash() + "/" + hashedFileName;
 				final File outputFile = new File(rootStorageDir + relativeStoragePath);
 
 				Files.createDirectories(Paths.get(outputFile.getAbsolutePath()));
@@ -62,10 +62,10 @@ public class DefaultFileSystemStorageService implements FileSystemStorageService
 				BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
 				ImageIO.write(bufferedImage, contentType, outputFile);
 				LOG.info("Stored file with name: " + hashedFileName);
-				return hashedFileName;
+				return relativeStoragePath;
 			} catch (FileAlreadyExistsException e) {
-				LOG.info("File with name: \'" + hashedFileName + "\' already exists");
-				return hashedFileName;
+				LOG.info("File with name: \'" + relativeStoragePath + "\' already exists");
+				return relativeStoragePath;
 			} catch (IOException e) {
 				LOG.error("Reading bytes from image with name + \'" + image.getName() + "\' and user \'" + sessionService.getSessionUser().getUsername() + "\' failed", e);
 			}
@@ -77,7 +77,7 @@ public class DefaultFileSystemStorageService implements FileSystemStorageService
 	@Override
 	public Optional<byte[]> readImage(String name) {
 		try {
-			return Optional.of(Files.readAllBytes(Paths.get(rootStorageDir + getSessionUsernameHash() + "/" + name)));
+			return Optional.of(Files.readAllBytes(Paths.get(rootStorageDir + name)));
 		} catch (IOException e) {
 			LOG.error("Could not read image with name: \'" + name + "\'");
 		}
