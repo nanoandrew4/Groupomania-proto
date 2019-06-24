@@ -2,6 +2,7 @@ package com.greenapper.controllers;
 
 import com.greenapper.enums.CampaignState;
 import com.greenapper.enums.CampaignType;
+import com.greenapper.forms.campaigns.CampaignForm;
 import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.services.CampaignService;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class CampaignController {
 	@GetMapping(CAMPAIGN_CREATION_URI)
 	public String getCampaignUpdateForm(final Model model, @RequestParam(required = false) final String type) {
 		try {
-			model.addAttribute("campaign", Class.forName(Campaign.class.getPackage().getName() + "." + type + "Campaign").getConstructor().newInstance());
+			model.addAttribute("campaignForm", Class.forName(CampaignForm.class.getPackage().getName() + "." + type + "CampaignForm").getConstructor().newInstance());
 			return getFormForCampaignType(type);
 		} catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			if (type != null)
@@ -56,13 +57,13 @@ public class CampaignController {
 	}
 
 	@PostMapping(CAMPAIGN_CREATION_URI)
-	public String updateCampaign(final Campaign campaign, final Errors errors) {
+	public String updateCampaign(final CampaignForm campaignForm, final Errors errors) {
 		try {
-			final CampaignService campaignService = (CampaignService) applicationContext.getBean(campaign.getType().displayName.toLowerCase() + "CampaignService");
-			if (campaign.getId() == null)
-				campaignService.createCampaign(campaign, errors);
+			final CampaignService campaignService = (CampaignService) applicationContext.getBean(campaignForm.getType().displayName.toLowerCase() + "CampaignService");
+			if (campaignForm.getId() == null)
+				campaignService.createCampaign(campaignForm, errors);
 			else
-				campaignService.editCampaign(campaign, errors);
+				campaignService.editCampaign(campaignForm, errors);
 
 			if (!errors.hasErrors())
 				return CAMPAIGN_CREATION_SUCCESS_REDIRECT;
@@ -70,7 +71,7 @@ public class CampaignController {
 			LOG.error("An error occurred while trying to get the service for the supplied campaign", e);
 			errors.reject("err.campaign.type");
 		}
-		return getFormForCampaignType(campaign.getType().displayName);
+		return getFormForCampaignType(campaignForm.getType().displayName);
 	}
 
 	public static String getFormForCampaignType(final String type) {
@@ -82,7 +83,7 @@ public class CampaignController {
 		final List<Campaign> campaigns = campaignService.getAllCampaigns();
 
 		campaigns.removeIf(campaign -> campaign.getState() == CampaignState.INACTIVE);
-		campaigns.removeIf(campaign -> campaign.isShowAfterExpiration() && campaign.getEndDate().isBefore(LocalDate.now().plus(4, ChronoUnit.DAYS)));
+		campaigns.removeIf(campaign -> !campaign.isShowAfterExpiration() || campaign.getEndDate().isBefore(LocalDate.now().plus(4, ChronoUnit.DAYS)));
 
 		model.addAttribute("campaigns", campaigns);
 		return "home";

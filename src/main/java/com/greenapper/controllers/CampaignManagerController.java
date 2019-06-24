@@ -1,20 +1,21 @@
 package com.greenapper.controllers;
 
-import com.greenapper.enums.CampaignState;
+import com.greenapper.forms.campaigns.CampaignForm;
 import com.greenapper.models.PasswordUpdate;
 import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.CampaignService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Predicate;
 
 @Controller
@@ -40,8 +41,10 @@ public class CampaignManagerController {
 
 	public final static String PASSWORD_UPDATE_SUCCESS_REDIRECT = "redirect:" + CampaignController.CAMPAIGNS_OVERVIEW_URI;
 
+	private Logger LOG = LoggerFactory.getLogger(CampaignManagerController.class);
+
 	@Autowired
-	private ApplicationContext applicationContext;
+	private CampaignService campaignService;
 
 	@Autowired
 	private CampaignManagerService campaignManagerService;
@@ -81,8 +84,14 @@ public class CampaignManagerController {
 		final Campaign campaign = campaignManagerService.getCampaigns().stream().filter(findById).findFirst().orElse(null);
 
 		if (campaign != null) {
-			model.addAttribute("campaign", campaign);
-			return CampaignController.getFormForCampaignType(campaign.getType().displayName);
+			try {
+				final Class<?> campaignModel = Class.forName(Campaign.class.getPackage().getName() + "." + campaign.getType().displayName + "Campaign");
+				final CampaignForm campaignForm = (CampaignForm) Class.forName(CampaignForm.class.getPackage().getName() + "." + campaign.getType().displayName + "CampaignForm").getConstructor(campaignModel).newInstance(campaign);
+				model.addAttribute("campaignForm", campaignForm);
+				return CampaignController.getFormForCampaignType(campaign.getType().displayName);
+			} catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+				LOG.error("Error creating campaign form for type: \'" + campaign.getType().displayName + "\'", e);
+			}
 		}
 
 		return CampaignController.CAMPAIGN_CREATION_DEFAULT_REDIRECTION;
@@ -90,15 +99,7 @@ public class CampaignManagerController {
 
 	@PatchMapping(CAMPAIGN_STATE_UPDATE_URI)
 	public String updateCampaignState(@PathVariable final Long id, @PathVariable final String state) {
-		final Predicate<Campaign> findById = campaign -> campaign.getId().equals(id);
-		final Campaign campaign = campaignManagerService.getCampaigns().stream().filter(findById).findFirst().orElse(null);
-
-		if (campaign != null) {
-			campaign.setState(CampaignState.valueOf(state.toUpperCase()));
-			final CampaignService campaignService = (CampaignService) applicationContext.getBean(campaign.getType().displayName.toLowerCase() + "CampaignService");
-			campaignService.editCampaign(campaign, new BeanPropertyBindingResult(campaign, "campaign"));
-		}
-
+		campaignService.updateCampaignState(id, state);
 		return CAMPAIGN_STATE_UPDATE_SUCCESS_REDIRECT;
 	}
 }

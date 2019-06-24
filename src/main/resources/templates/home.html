@@ -26,7 +26,8 @@
             <td th:text="${campaign.startDate}"></td>
             <td th:text="${campaign.endDate}"></td>
             <td th:text="${campaign.state.displayName}"></td>
-            <td><img class="img-thumbnail" th:if="${campaign.campaignImageFileName} != null"
+            <td><img class="img-thumbnail"
+                     th:if="${campaign.campaignImageFileName != null && campaign.campaignImageFileName != ''}"
                      th:src="@{~/images(fileName=${campaign.campaignImageFileName})}" src=""/></td>
         </tr>
         </tbody>

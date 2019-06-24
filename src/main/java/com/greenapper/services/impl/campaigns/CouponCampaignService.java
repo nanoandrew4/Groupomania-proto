@@ -1,5 +1,6 @@
 package com.greenapper.services.impl.campaigns;
 
+import com.greenapper.forms.campaigns.CampaignForm;
 import com.greenapper.models.CampaignManagerProfile;
 import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.models.campaigns.CouponCampaign;
@@ -20,8 +21,9 @@ public class CouponCampaignService extends DefaultCampaignService {
 	private CampaignManagerProfileService campaignManagerProfileService;
 
 	@Override
-	public void validateCampaign(final Campaign campaign, final Errors errors) {
-		couponCampaignValidator.validate(campaign, errors);
+	public void validateCampaign(final
+								 CampaignForm campaignForm, final Errors errors) {
+		couponCampaignValidator.validate(campaignForm, errors);
 	}
 
 	@Override

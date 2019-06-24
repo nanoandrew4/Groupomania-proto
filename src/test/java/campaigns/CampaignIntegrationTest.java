@@ -3,10 +3,10 @@ package campaigns;
 import com.greenapper.Main;
 import com.greenapper.controllers.CampaignController;
 import com.greenapper.enums.CampaignType;
+import com.greenapper.forms.campaigns.CampaignForm;
+import com.greenapper.forms.campaigns.OfferCampaignForm;
 import com.greenapper.models.CampaignManager;
 import com.greenapper.models.User;
-import com.greenapper.models.campaigns.Campaign;
-import com.greenapper.models.campaigns.OfferCampaign;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.SessionService;
 import org.assertj.core.util.Lists;
@@ -67,7 +67,7 @@ public class CampaignIntegrationTest {
 		final String ret = campaignController.getCampaignUpdateForm(model, "Offer");
 
 		assertEquals("campaigns/offerCampaign", ret);
-		assertEquals(CampaignType.OFFER, ((Campaign) model.asMap().get("campaign")).getType());
+		assertEquals(CampaignType.OFFER, ((CampaignForm) model.asMap().get("campaign")).getType());
 	}
 
 	@Test
@@ -76,12 +76,12 @@ public class CampaignIntegrationTest {
 		final String ret = campaignController.getCampaignUpdateForm(model, "Coupon");
 
 		assertEquals("campaigns/couponCampaign", ret);
-		assertEquals(CampaignType.COUPON, ((Campaign) model.asMap().get("campaign")).getType());
+		assertEquals(CampaignType.COUPON, ((CampaignForm) model.asMap().get("campaign")).getType());
 	}
 
 	@Test
 	public void createCampaignWithoutTitle() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setTitle(null);
@@ -92,7 +92,7 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithoutDescription() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setDescription(null);
@@ -103,7 +103,7 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithoutType() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setType(null);
@@ -114,10 +114,10 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithNegativeQuantity() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
-		campaign.setQuantity(-1L);
+		campaign.setQuantity("-1");
 		final String ret = campaignController.updateCampaign(campaign, errors);
 
 		performStandardKOAssertions(errors, Collections.singletonList("err.campaign.quantity"), ret);
@@ -125,7 +125,7 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithNullCampaignOriginalPrice() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setOriginalPrice(null);
@@ -136,10 +136,10 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithNegativeCampaignOriginalPrice() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
-		campaign.setOriginalPrice(-1D);
+		campaign.setOriginalPrice("-1");
 		final String ret = campaignController.updateCampaign(campaign, errors);
 
 		performStandardKOAssertions(errors, Collections.singletonList("err.campaign.originalPrice"), ret);
@@ -147,7 +147,7 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithNullStartDate() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setStartDate(null);
@@ -158,10 +158,10 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithPastStartDate() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
-		campaign.setStartDate(LocalDate.now().minus(5, ChronoUnit.DAYS));
+		campaign.setStartDate(String.valueOf(LocalDate.now().minus(5, ChronoUnit.DAYS)));
 		final String ret = campaignController.updateCampaign(campaign, errors);
 
 		performStandardKOAssertions(errors, Collections.singletonList("err.campaign.startDate"), ret);
@@ -169,7 +169,7 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithNullEndDate() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setEndDate(null);
@@ -180,10 +180,10 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithPastEndDate() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
-		campaign.setEndDate(LocalDate.now().minus(5, ChronoUnit.DAYS));
+		campaign.setEndDate(String.valueOf(LocalDate.now().minus(5, ChronoUnit.DAYS)));
 		final String ret = campaignController.updateCampaign(campaign, errors);
 
 		final List<String> expectedErrorCodes = Lists.newArrayList("err.campaign.endDate", "err.campaign.startDateAfterEndDate");
@@ -192,10 +192,10 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithStartDateAfterEndDate() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
-		campaign.setStartDate(campaign.getEndDate().plus(5, ChronoUnit.DAYS));
+		campaign.setStartDate(String.valueOf(LocalDate.parse(campaign.getEndDate()).plus(5, ChronoUnit.DAYS)));
 		final String ret = campaignController.updateCampaign(campaign, errors);
 
 		performStandardKOAssertions(errors, Collections.singletonList("err.campaign.startDateAfterEndDate"), ret);
@@ -203,7 +203,7 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithStartDateEqualingEndDate() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setEndDate(campaign.getStartDate());
@@ -214,7 +214,7 @@ public class CampaignIntegrationTest {
 
 	@Test
 	public void createCampaignWithoutDiscountedPriceAndPercentDiscount() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		campaign.setDiscountedPrice(null);
@@ -227,7 +227,7 @@ public class CampaignIntegrationTest {
 	@Test
 	@DirtiesContext
 	public void createValidCampaign() {
-		final Campaign campaign = getMinimalCampaign();
+		final CampaignForm campaign = getMinimalCampaign();
 		final Errors errors = new BeanPropertyBindingResult(campaign, "campaign");
 
 		final String ret = campaignController.updateCampaign(campaign, errors);
@@ -245,18 +245,18 @@ public class CampaignIntegrationTest {
 			assertTrue(errors.getAllErrors().stream().map(DefaultMessageSourceResolvable::getCode).anyMatch(errorCode::equals));
 	}
 
-	private Campaign getMinimalCampaign() {
-		return getMinimalCampaign(new OfferCampaign());
+	private CampaignForm getMinimalCampaign() {
+		return getMinimalCampaign(new OfferCampaignForm());
 	}
 
-	private Campaign getMinimalCampaign(final Campaign campaign) {
+	private CampaignForm getMinimalCampaign(final CampaignForm campaign) {
 		campaign.setTitle("Title");
 		campaign.setDescription("Description");
-		campaign.setQuantity(1L);
-		campaign.setStartDate(LocalDate.now().plus(1, ChronoUnit.DAYS));
-		campaign.setEndDate(LocalDate.now().plus(5, ChronoUnit.DAYS));
-		campaign.setOriginalPrice(1D);
-		campaign.setDiscountedPrice(0.5D);
+		campaign.setQuantity("1");
+		campaign.setStartDate(String.valueOf(LocalDate.now().plus(1, ChronoUnit.DAYS)));
+		campaign.setEndDate(String.valueOf(LocalDate.now().plus(5, ChronoUnit.DAYS)));
+		campaign.setOriginalPrice("1");
+		campaign.setDiscountedPrice("0.5");
 
 		return campaign;
 	}

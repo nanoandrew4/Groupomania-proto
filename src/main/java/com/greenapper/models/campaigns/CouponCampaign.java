@@ -1,6 +1,7 @@
 package com.greenapper.models.campaigns;
 
 import com.greenapper.enums.CampaignType;
+import com.greenapper.forms.campaigns.CouponCampaignForm;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
@@ -19,14 +20,24 @@ public class CouponCampaign extends Campaign {
 
 	private String campaignManagerAddress;
 
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-mm-dd")
 	private LocalDate couponStartDate;
 
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-mm-dd")
 	private LocalDate couponEndDate;
 
 	public CouponCampaign() {
 		this.setType(CampaignType.COUPON);
+	}
+
+	public CouponCampaign(final CouponCampaignForm couponCampaignForm) {
+		super(couponCampaignForm);
+		this.couponDescription = couponCampaignForm.getCouponDescription();
+		this.campaignManagerName = couponCampaignForm.getCampaignManagerName();
+		this.campaignManagerEmail = couponCampaignForm.getCampaignManagerEmail();
+		this.campaignManagerAddress = couponCampaignForm.getCampaignManagerAddress();
+		this.couponStartDate = LocalDate.parse(couponCampaignForm.getCouponStartDate());
+		this.couponEndDate = LocalDate.parse(couponCampaignForm.getCouponEndDate());
 	}
 
 	public String getCouponDescription() {

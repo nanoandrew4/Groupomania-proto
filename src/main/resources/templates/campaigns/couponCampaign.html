@@ -18,7 +18,7 @@
         <form th:replace="campaigns/campaignFragments :: campaignTypeChange">Generic campaign fragment</form>
 
         <form action="#" th:action="@{${T(com.greenapper.controllers.CampaignController).CAMPAIGN_CREATION_URI}}"
-              th:method="post" th:object="${campaign}" enctype="multipart/form-data">
+              th:method="post" th:object="${campaignForm}" enctype="multipart/form-data">
 
             <form th:replace="fragments :: validationErrors">Generic campaign fragment</form>
             <div th:replace="campaigns/campaignFragments :: campaignFields">Generic campaign fields</div>
@@ -31,8 +31,8 @@
             <label th:text="#{campaign.coupon.percentDiscountOrDiscountedPriceOrDescription}"></label>
             <div class="form-group col-4">
                 <label th:text="#{campaign.coupon.couponStartDate}">Coupon start date</label>
-                <div class="input-group date" data-date-format="dd-mm-yyyy">
-                    <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponStartDate}" type="text"
+                <div class="input-group date" data-date-format="yyyy-mm-dd">
+                    <input class="form-control" placeholder="yyyy-mm-dd" th:field="*{couponStartDate}" type="text"
                            th:attrappend="readonly=${readonly != null} ? 'readonly' : ''">
                     <div class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
@@ -41,8 +41,8 @@
             </div>
             <div class="form-group col-4">
                 <label th:text="#{campaign.coupon.couponEndDate}">Coupon end date</label>
-                <div class="input-group date" data-date-format="dd-mm-yyyy">
-                    <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{couponEndDate}" type="text"
+                <div class="input-group date" data-date-format="yyyy-mm-dd">
+                    <input class="form-control" placeholder="yyyy-mm-dd" th:field="*{couponEndDate}" type="text"
                            th:attrappend="readonly=${readonly != null} ? 'readonly' : ''">
                     <div class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>

@@ -51,7 +51,6 @@ public class DefaultCampaignManagerProfileService implements CampaignManagerProf
 				campaignManager.get().setCampaignManagerProfile(updatedProfile);
 				campaignManagerRepository.save(campaignManager.get());
 				campaignManagerProfileRepository.save(updatedProfile);
-				sessionService.setSessionUser(campaignManager.get());
 			}
 		}
 	}

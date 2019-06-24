@@ -15,11 +15,11 @@
 <body>
 
 <form action="#" th:action="@{${T(com.greenapper.controllers.CampaignController).CAMPAIGN_CREATION_URI}}"
-      th:fragment="campaignTypeChange" th:method="get" th:object="${campaign}">
+      th:fragment="campaignTypeChange" th:method="get" th:object="${campaignForm}">
     <center>
         <label th:text="#{campaign.type}">Campaign type</label>
         <select id="type" name="type" onchange="this.form.submit()"
-                th:attrappend="disabled=${campaign.id != null} ? 'disabled' : ''">
+                th:attrappend="disabled=${campaignForm.id != null} ? 'disabled' : ''">
             <option th:each="campaignType : ${T(com.greenapper.enums.CampaignType).values()}"
                     th:selected="${campaignType.displayName} == *{type.displayName}"
                     th:text="${campaignType.displayName}"
@@ -59,8 +59,8 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.startDate}">Campaign start date</label>
-        <div class="input-group date" data-date-format="dd-mm-yyyy">
-            <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{startDate}" type="text"
+        <div class="input-group date" data-date-format="yyyy-mm-dd">
+            <input class="form-control" placeholder="yyyy-mm-dd" th:field="*{startDate}" type="text"
                    th:attrappend="readonly=${readonly != null} ? 'readonly' : ''">
             <div class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
@@ -69,8 +69,8 @@
     </div>
     <div class="form-group col-4">
         <label th:text="#{campaign.endDate}">Campaign end date</label>
-        <div class="input-group date" data-date-format="dd-mm-yyyy">
-            <input class="form-control" placeholder="dd-mm-yyyy" th:field="*{endDate}" type="text"
+        <div class="input-group date" data-date-format="yyyy-mm-dd">
+            <input class="form-control" placeholder="yyyy-mm-dd" th:field="*{endDate}" type="text"
                    th:attrappend="readonly=${readonly != null} ? 'readonly' : ''">
             <div class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
@@ -112,10 +112,8 @@
     </div>
     <script type="text/javascript">
             $(function () {
-                 $('.input-group.date').datepicker({format: "dd-mm-yyyy"});
+                 $('.input-group.date').datepicker({format: "yyyy-mm-dd"});
             });
-
-
     </script>
 </div>
 <div th:if="${readonly} == null" class="text-center" th:fragment="submitCampaign">

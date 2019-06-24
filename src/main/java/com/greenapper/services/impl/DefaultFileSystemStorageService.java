@@ -64,7 +64,7 @@ public class DefaultFileSystemStorageService implements FileSystemStorageService
 				LOG.info("Stored file with name: " + hashedFileName);
 				return relativeStoragePath;
 			} catch (FileAlreadyExistsException e) {
-				LOG.info("File with name: \'" + relativeStoragePath + "\' already exists");
+				LOG.info("File with name: \'" + relativeStoragePath + "\' already exists, returning \'" + relativeStoragePath + "\' to caller");
 				return relativeStoragePath;
 			} catch (IOException e) {
 				LOG.error("Reading bytes from image with name + \'" + image.getName() + "\' and user \'" + sessionService.getSessionUser().getUsername() + "\' failed", e);

@@ -1,16 +1,19 @@
 package com.greenapper.services;
 
+import com.greenapper.forms.campaigns.CampaignForm;
 import com.greenapper.models.campaigns.Campaign;
 import org.springframework.validation.Errors;
 
 import java.util.List;
 
 public interface CampaignService {
-	void createCampaign(final Campaign campaign, final Errors errors);
+	void createCampaign(final CampaignForm campaign, final Errors errors);
 
-	void editCampaign(final Campaign campaign, final Errors errors);
+	void editCampaign(final CampaignForm campaign, final Errors errors);
 
-	void validateCampaign(final Campaign campaign, final Errors errors);
+	void updateCampaignState(final Long id, final String state);
+
+	void validateCampaign(final CampaignForm campaign, final Errors errors);
 
 	void setDefaultsForCampaignSubtype(final Campaign campaignSubtype);
 

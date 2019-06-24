@@ -2,9 +2,9 @@ package com.greenapper.models.campaigns;
 
 import com.greenapper.enums.CampaignState;
 import com.greenapper.enums.CampaignType;
+import com.greenapper.forms.campaigns.CampaignForm;
 import com.greenapper.models.CampaignManager;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -26,20 +26,17 @@ public abstract class Campaign {
 
 	private String description;
 
-	@Transient
-	private MultipartFile campaignImage;
-
 	private String campaignImageFileName;
 
 	private CampaignType type;
 
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-mm-dd")
 	private LocalDate startDate;
 
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+	@DateTimeFormat(pattern = "yyyy-mm-dd")
 	private LocalDate endDate;
 
-	private Long quantity;
+	private Double quantity = Double.POSITIVE_INFINITY;
 
 	private boolean showAfterExpiration;
 
@@ -50,6 +47,32 @@ public abstract class Campaign {
 	private Double discountedPrice;
 
 	private CampaignState state;
+
+	public Campaign() {}
+
+	public Campaign(final CampaignForm campaignForm) {
+		this.id = campaignForm.getId();
+		this.title = campaignForm.getTitle();
+		this.description = campaignForm.getDescription();
+		this.campaignImageFileName = campaignForm.getCampaignImageFileName();
+		this.type = campaignForm.getType();
+		this.state = campaignForm.getState();
+		this.startDate = LocalDate.parse(campaignForm.getStartDate());
+		this.endDate = LocalDate.parse(campaignForm.getEndDate());
+		this.quantity = Double.parseDouble(campaignForm.getQuantity());
+		this.showAfterExpiration = campaignForm.isShowAfterExpiration();
+		this.originalPrice = Double.parseDouble(campaignForm.getOriginalPrice());
+		this.percentDiscount = parseDouble(campaignForm.getPercentDiscount());
+		this.discountedPrice = parseDouble(campaignForm.getDiscountedPrice());
+	}
+
+	private Double parseDouble(final String str) {
+		try {
+			return Double.valueOf(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
 
 	public Long getId() {
 		return id;
@@ -83,14 +106,6 @@ public abstract class Campaign {
 		this.description = description;
 	}
 
-	public MultipartFile getCampaignImage() {
-		return campaignImage;
-	}
-
-	public void setCampaignImage(MultipartFile campaignImage) {
-		this.campaignImage = campaignImage;
-	}
-
 	public CampaignType getType() {
 		return type;
 	}
@@ -115,11 +130,11 @@ public abstract class Campaign {
 		this.endDate = endDate;
 	}
 
-	public Long getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Long quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

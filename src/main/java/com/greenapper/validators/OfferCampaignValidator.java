@@ -1,5 +1,6 @@
 package com.greenapper.validators;
 
+import com.greenapper.forms.campaigns.OfferCampaignForm;
 import com.greenapper.models.campaigns.OfferCampaign;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -20,11 +21,11 @@ public class OfferCampaignValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		final OfferCampaign offerCampaign = (OfferCampaign) target;
+		final OfferCampaignForm offerCampaignForm = (OfferCampaignForm) target;
 
-		campaignValidator.validate(offerCampaign, errors);
+		campaignValidator.validate(offerCampaignForm, errors);
 
-		if (offerCampaign.getDiscountedPrice() == null && offerCampaign.getPercentDiscount() == null)
+		if (offerCampaignForm.getDiscountedPrice() == null && offerCampaignForm.getPercentDiscount() == null)
 			errors.reject("err.campaign.offer.discountedPriceOrPercent");
 	}
 }

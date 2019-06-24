@@ -1,7 +1,7 @@
 package com.greenapper.handlers;
 
-import com.greenapper.models.campaigns.Campaign;
-import com.greenapper.models.campaigns.OfferCampaign;
+import com.greenapper.forms.campaigns.CampaignForm;
+import com.greenapper.forms.campaigns.OfferCampaignForm;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
@@ -16,11 +16,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.ServletRequest;
 import java.util.Map;
 
-public class CampaignHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
+public class CampaignFormHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Override
 	public boolean supportsParameter(MethodParameter methodParameter) {
-		return methodParameter.getParameterType().equals(Campaign.class);
+		return methodParameter.getParameterType().equals(CampaignForm.class);
 	}
 
 	@Override
@@ -32,21 +32,21 @@ public class CampaignHandlerMethodArgumentResolver implements HandlerMethodArgum
 
 		final String name = ModelFactory.getNameForParameter(methodParameter);
 
-		final Campaign campaign;
+		final CampaignForm campaignForm;
 		if (campaignType != null) {
-			final String campaignClassName = campaignType.charAt(0) + campaignType.substring(1).toLowerCase() + "Campaign";
-			campaign = (Campaign) Class.forName(Campaign.class.getPackage().getName() + "." + campaignClassName).getConstructor().newInstance();
+			final String campaignClassName = campaignType.charAt(0) + campaignType.substring(1).toLowerCase() + "CampaignForm";
+			campaignForm = (CampaignForm) Class.forName(CampaignForm.class.getPackage().getName() + "." + campaignClassName).getConstructor().newInstance();
 		} else
-			campaign = new OfferCampaign();
+			campaignForm = new OfferCampaignForm();
 
-		final WebDataBinder binder = webDataBinderFactory.createBinder(nativeWebRequest, campaign, name);
+		final WebDataBinder binder = webDataBinderFactory.createBinder(nativeWebRequest, campaignForm, name);
 		bindParameters(nativeWebRequest, binder);
 		final BindingResult bindingResult = binder.getBindingResult();
 
-		Map<String, Object> bindingResultModel = bindingResult.getModel();
+		final Map<String, Object> bindingResultModel = bindingResult.getModel();
 		modelAndViewContainer.removeAttributes(bindingResultModel);
 		modelAndViewContainer.addAllAttributes(bindingResultModel);
-		return campaign;
+		return campaignForm;
 	}
 
 	// Copied from ServletModelAttributeMethodProcessor#bindRequestParameters(WebDataBinder, NativeWebRequest)

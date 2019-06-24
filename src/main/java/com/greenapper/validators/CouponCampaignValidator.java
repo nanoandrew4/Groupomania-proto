@@ -1,5 +1,6 @@
 package com.greenapper.validators;
 
+import com.greenapper.forms.campaigns.CouponCampaignForm;
 import com.greenapper.models.campaigns.CouponCampaign;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -22,19 +23,19 @@ public class CouponCampaignValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		campaignValidator.validate(target, errors);
 
-		final CouponCampaign couponCampaign = (CouponCampaign) target;
-		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCouponDescription(), "err.campaign.coupon.description", errors);
-		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerName(), "err.campaign.coupon.managerName", errors);
-		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerEmail(), "err.campaign.coupon.managerEmail", errors);
-		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaign.getCampaignManagerAddress(), "err.campaign.coupon.managerAddress", errors);
-		CampaignValidator.rejectDateIfEmptyOrBeforeNow(couponCampaign.getCouponStartDate(), "err.campaign.coupon.couponStartDate", errors);
-		CampaignValidator.rejectDateIfEmptyOrBeforeNow(couponCampaign.getCouponEndDate(), "err.campaign.coupon.couponEndDate", errors);
+		final CouponCampaignForm couponCampaignForm = (CouponCampaignForm) target;
+		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaignForm.getCouponDescription(), "err.campaign.coupon.description", errors);
+		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaignForm.getCampaignManagerName(), "err.campaign.coupon.managerName", errors);
+		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaignForm.getCampaignManagerEmail(), "err.campaign.coupon.managerEmail", errors);
+		CampaignValidator.rejectStringIfPresentAndTooLong(couponCampaignForm.getCampaignManagerAddress(), "err.campaign.coupon.managerAddress", errors);
+		CampaignValidator.rejectDateIfEmptyOrBeforeNow(couponCampaignForm.getCouponStartDate(), "err.campaign.coupon.couponStartDate", errors);
+		CampaignValidator.rejectDateIfEmptyOrBeforeNow(couponCampaignForm.getCouponEndDate(), "err.campaign.coupon.couponEndDate", errors);
 
-		CampaignValidator.rejectDateIfEqualOrAfterOtherDate(couponCampaign.getCouponStartDate(), couponCampaign.getCouponEndDate(), "err.campaign.coupon.startDateAfterEndDate", errors);
-		CampaignValidator.rejectDateIfBeforeOtherDate(couponCampaign.getCouponStartDate(), couponCampaign.getStartDate(), "err.campaign.coupon.couponStartDateBeforeCampaign", errors);
-		CampaignValidator.rejectDateIfAfterOtherDate(couponCampaign.getCouponEndDate(), couponCampaign.getEndDate(), "err.campaign.coupon.couponEndDateBeforeCampaign", errors);
+		CampaignValidator.rejectDateIfEqualOrAfterOtherDate(couponCampaignForm.getCouponStartDate(), couponCampaignForm.getCouponEndDate(), "err.campaign.coupon.startDateAfterEndDate", errors);
+		CampaignValidator.rejectDateIfBeforeOtherDate(couponCampaignForm.getCouponStartDate(), couponCampaignForm.getStartDate(), "err.campaign.coupon.couponStartDateBeforeCampaign", errors);
+		CampaignValidator.rejectDateIfAfterOtherDate(couponCampaignForm.getCouponEndDate(), couponCampaignForm.getEndDate(), "err.campaign.coupon.couponEndDateBeforeCampaign", errors);
 
-		if (couponCampaign.getDiscountedPrice() == null && couponCampaign.getPercentDiscount() == null && (couponCampaign.getCouponDescription() == null || couponCampaign.getCouponDescription().trim().isEmpty()))
+		if (couponCampaignForm.getDiscountedPrice() == null && couponCampaignForm.getPercentDiscount() == null && (couponCampaignForm.getCouponDescription() == null || couponCampaignForm.getCouponDescription().trim().isEmpty()))
 			errors.reject("err.campaign.coupon.discountedPriceOrPercentOrDescription");
 	}
 }

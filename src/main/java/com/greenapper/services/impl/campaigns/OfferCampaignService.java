@@ -1,5 +1,6 @@
 package com.greenapper.services.impl.campaigns;
 
+import com.greenapper.forms.campaigns.CampaignForm;
 import com.greenapper.models.campaigns.Campaign;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class OfferCampaignService extends DefaultCampaignService {
 	private Validator offerCampaignValidator;
 
 	@Override
-	public void validateCampaign(final Campaign campaign, final Errors errors) {
+	public void validateCampaign(final CampaignForm campaign, final Errors errors) {
 		offerCampaignValidator.validate(campaign, errors);
 	}
 

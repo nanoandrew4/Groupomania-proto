@@ -1,6 +1,6 @@
 package com.greenapper;
 
-import com.greenapper.handlers.CampaignHandlerMethodArgumentResolver;
+import com.greenapper.handlers.CampaignFormHandlerMethodArgumentResolver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,7 +15,7 @@ public class Main implements WebMvcConfigurer {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		argumentResolvers.add(new CampaignHandlerMethodArgumentResolver());
+		argumentResolvers.add(new CampaignFormHandlerMethodArgumentResolver());
 	}
 
 	public static void main(String... args) {
