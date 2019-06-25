@@ -43,7 +43,8 @@ public class PostRegistrationFilter implements Filter {
 	private boolean allowRedirect(final HttpServletRequest request, final String redirectUri) {
 		final String requestUri = request.getRequestURI();
 		return "GET".equals(request.getMethod()) &&
-			   (!(requestUri.equals(redirectUri) || requestUri.equals("/login") || requestUri.equals("/logout") || requestUri.contains("img") || redirectUri.contains("css")));
+			   (!(requestUri.equals(redirectUri) || requestUri.equals("/login") || requestUri.equals("/logout")
+				  || requestUri.contains("img") || requestUri.contains("css")));
 	}
 
 	private String checkCampaignManagerData(final CampaignManager sessionCampaignManager) {
