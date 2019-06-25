@@ -25,7 +25,7 @@ public class CampaignValidator implements Validator {
 			errors.reject(errorCode);
 	}
 
-	private static Double parseDouble(final String doubleStr) {
+	public static Double parseDouble(final String doubleStr) {
 		try {
 			return Double.valueOf(doubleStr);
 		} catch (NumberFormatException e) {

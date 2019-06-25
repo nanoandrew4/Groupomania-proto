@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CampaignController {
@@ -35,6 +37,8 @@ public class CampaignController {
 
 	private static final String ROOT_URI = "/campaigns";
 
+	public final static String CAMPAIGN_VIEW_URI = ROOT_URI;
+
 	public static final String CAMPAIGNS_OVERVIEW_URI = ROOT_URI;
 
 	public static final String CAMPAIGN_CREATION_URI = ROOT_URI + "/create";
@@ -42,6 +46,17 @@ public class CampaignController {
 	public static final String CAMPAIGN_CREATION_DEFAULT_REDIRECTION = "redirect:" + CAMPAIGN_CREATION_URI + "?type=" + CampaignType.OFFER.displayName;
 
 	public static final String CAMPAIGN_CREATION_SUCCESS_REDIRECT = "redirect:" + CampaignManagerController.CAMPAIGNS_OVERVIEW_URI;
+
+	@GetMapping(CAMPAIGN_VIEW_URI + "/{id}")
+	public String getCampaignById(final Model model, @PathVariable final Long id) {
+		final CampaignForm campaignForm = createCampaignFormFromCampaign(campaignService.getCampaignById(id)).orElse(null);
+		model.addAttribute("campaignForm", campaignForm);
+		model.addAttribute("readonly", true);
+
+		if (campaignForm != null)
+			return getFormForCampaignType(campaignForm.getType().displayName);
+		return getFormForCampaignType("offer");
+	}
 
 	@GetMapping(CAMPAIGN_CREATION_URI)
 	public String getCampaignUpdateForm(final Model model, @RequestParam(required = false) final String type) {
@@ -74,18 +89,30 @@ public class CampaignController {
 		return getFormForCampaignType(campaignForm.getType().displayName);
 	}
 
-	public static String getFormForCampaignType(final String type) {
-		return "campaigns/" + type.toLowerCase() + "Campaign";
-	}
-
 	@GetMapping(CAMPAIGNS_OVERVIEW_URI)
 	public String getAllCampaigns(final Model model) {
 		final List<Campaign> campaigns = campaignService.getAllCampaigns();
 
 		campaigns.removeIf(campaign -> campaign.getState() == CampaignState.INACTIVE);
-		campaigns.removeIf(campaign -> !campaign.isShowAfterExpiration() || campaign.getEndDate().isBefore(LocalDate.now().plus(4, ChronoUnit.DAYS)));
+		campaigns.removeIf(campaign -> campaign.isShowAfterExpiration() && LocalDate.now().plus(4, ChronoUnit.DAYS).isAfter(campaign.getEndDate()));
+		campaigns.removeIf(campaign -> !campaign.isShowAfterExpiration() && LocalDate.now().isAfter(campaign.getEndDate()));
 
 		model.addAttribute("campaigns", campaigns);
 		return "home";
+	}
+
+	public Optional<CampaignForm> createCampaignFormFromCampaign(final Campaign campaign) {
+		try {
+			final String fullClassName = CampaignForm.class.getPackage().getName() + "." + campaign.getType().displayName + "CampaignForm";
+			final String modelClassName = Campaign.class.getPackage().getName() + "." + campaign.getType().displayName + "Campaign";
+			return Optional.of((CampaignForm) Class.forName(fullClassName).getConstructor(Class.forName(modelClassName)).newInstance(campaign));
+		} catch (ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+			LOG.error("Could not create campaign model for type: \'" + campaign.getType().displayName + "\'", e);
+			return Optional.empty();
+		}
+	}
+
+	public static String getFormForCampaignType(final String type) {
+		return "campaigns/" + type.toLowerCase() + "Campaign";
 	}
 }

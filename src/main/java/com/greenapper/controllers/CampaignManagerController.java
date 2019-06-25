@@ -35,8 +35,6 @@ public class CampaignManagerController {
 
 	public final static String CAMPAIGN_STATE_UPDATE_SUCCESS_REDIRECT = "redirect:" + CAMPAIGNS_OVERVIEW_URI;
 
-	public final static String CAMPAIGN_VIEW_URI = ROOT_URI + "/campaigns/{id}";
-
 	public final static String CAMPAIGNS_OVERVIEW_FORM = "campaign_manager/campaignsOverview";
 
 	public final static String PASSWORD_UPDATE_SUCCESS_REDIRECT = "redirect:" + CampaignController.CAMPAIGNS_OVERVIEW_URI;
@@ -69,13 +67,6 @@ public class CampaignManagerController {
 	public String getCampaignOverview(final Model model) {
 		model.addAttribute("campaigns", campaignManagerService.getCampaigns());
 		return CAMPAIGNS_OVERVIEW_FORM;
-	}
-
-	@GetMapping(CAMPAIGN_VIEW_URI)
-	public String getCampaignById(final Model model, @PathVariable final Long id) {
-		final String form = getCampaignForEditById(model, id);
-		model.addAttribute("readonly", true);
-		return form;
 	}
 
 	@GetMapping(CAMPAIGN_UPDATE_URI)

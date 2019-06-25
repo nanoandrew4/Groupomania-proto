@@ -12,6 +12,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <link href="../static/css/navbar.css" rel="stylesheet" th:href="@{/css/navbar.css}" type="text/css"/>
     </th:block>
 </head>
 
@@ -23,81 +25,74 @@
 </div>
 <nav class="navbar navbar-inverse" role="navigation" th:fragment="navbar">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col col-lg-4">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="languageMenu"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <label th:text="#{lang.menu}"></label>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="languageMenu">
-                        <li><a th:href="@{${#httpServletRequest.requestURI}} + '?lang=en'"
-                               th:text="#{lang.en}">English</a></li>
-                        <li><a th:href="@{${#httpServletRequest.requestURI}} + '?lang=fr'"
-                               th:text="#{lang.fr}">French</a></li>
-                        <li><a th:href="@{${#httpServletRequest.requestURI}} + '?lang=es'"
-                               th:text="#{lang.es}">Spanish</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="text-center col col-lg-4">
-                <a href="/">
-                    <img th:src="@{/img/logo.png}" title="GroupoMania" alt="GroupoMania"/>
-                </a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="col col-lg-4" th:unless="${#httpServletRequest.requestURI.equals('/login')}">
-                <div sec:authorize="isAnonymous()">
-                    <form class="navbar-form navbar-right" method="get" name="loginForm" th:action="@{/login}">
-                        <input class="btn btn-link" th:value="#{header.login}" type="submit"/>
+        <a class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-3 text-center"
+           href="/">
+            <img th:src="@{/img/logo.png}" title="GroupoMania" alt="GroupoMania" class="navbar-logo-size"
+                 src=""/>
+        </a>
+        <div class="navbar-header">
+            <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#myNavbar"
+                    data-toggle="collapse" type="button">
+                <!-- the hamburger -->
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li sec:authorize="isAnonymous()"
+                    th:unless="${#httpServletRequest.requestURI.contains('/login')}">
+                    <a class="text-primary" href="/login"><label th:text="#{header.login}">Login</label></a>
+                </li>
+                <li sec:authorize="${hasRole('CAMPAIGN_MANAGER')}">
+                    <a href="/campaigns" th:text="#{header.home}">Home</a>
+                </li>
+                <li sec:authorize="${hasRole('CAMPAIGN_MANAGER')}">
+                    <a href="/campaign-manager/password/update" th:text="#{header.passwordUpdate}">Password
+                        Update</a>
+                </li>
+                <li sec:authorize="${hasRole('CAMPAIGN_MANAGER')}">
+                    <a href="/campaign-manager/profile/setup" th:text="#{header.profile}">Profile</a>
+                </li>
+                <li sec:authorize="${hasRole('CAMPAIGN_MANAGER')}">
+                    <a href="/campaign-manager/campaigns" th:text="#{header.campaignOverview}">Campaign
+                        overview</a>
+                </li>
+                <li sec:authorize="${hasRole('CAMPAIGN_MANAGER')}">
+                    <form class="" method="post" name="logoutForm"
+                          th:action="@{/logout}">
+                        <input class="btn btn-link" th:value="#{header.logout}" type="submit"/>
                     </form>
-                </div>
-                <div class="navbar-header" sec:authorize="${hasRole('CAMPAIGN_MANAGER')}">
-                    <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#myNavbar"
-                            data-toggle="collapse" type="button">
-                        <!-- the hamburger -->
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar" sec:authorize="${hasRole('CAMPAIGN_MANAGER')}">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="/campaigns">Home</a>
-                        </li>
-                        <li>
-                            <a href="/campaign-manager/password/update">Password Update</a>
-                        </li>
-                        <li>
-                            <a href="/campaign-manager/profile/setup">Profile</a>
-                        </li>
-                        <li>
-                            <a href="/campaign-manager/campaigns">Campaign overview</a>
-                        </li>
-                        <li>
-                            <form class="navbar-form navbar-right" method="post" name="logoutForm"
-                                  th:action="@{/logout}">
-                                <input class="btn btn-link" th:value="#{header.logout}" type="submit"/>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                </li>
+                <li id="navLangDropdown">
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" type="button" id="languageMenu"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <label class="text-secondary" th:text="#{lang.menu}"></label>
+                            <span class="caretc"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="languageMenu">
+                            <li><a th:href="@{${#httpServletRequest.requestURI}} + '?lang=en'"
+                                   th:text="#{lang.en}">English</a></li>
+                            <li><a th:href="@{${#httpServletRequest.requestURI}} + '?lang=fr'"
+                                   th:text="#{lang.fr}">French</a></li>
+                            <li><a th:href="@{${#httpServletRequest.requestURI}} + '?lang=es'"
+                                   th:text="#{lang.es}">Spanish</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
 
 <div th:fragment="footer">
     <hr>
-    <center>
+    <div class="text-center">
         <div th:utext="#{copyright}">Footer title</div>
-    </center>
+    </div>
 </div>
 </body>
 </html>

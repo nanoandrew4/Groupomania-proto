@@ -11,9 +11,9 @@
 <body>
 <div th:replace="fragments :: navbar">Navigation bar fragment</div>
 
-<div class="container body-content">
+<div class="container-fluid body-content">
     <form action="#" th:action="@{${T(com.greenapper.controllers.CampaignController).CAMPAIGN_CREATION_URI}}"
-          method="get">
+          method="get" style="margin:auto;">
         <input class="btn btn-default" th:value="#{campaign.overview.create.button}" type="submit"/>
     </form>
     <table id="campaignManagementOverview" class="table table-hover table-striped table-responsive">
@@ -37,30 +37,28 @@
             <td th:text="${campaign.endDate}"></td>
             <td th:text="${campaign.type.displayName}"></td>
             <td th:text="${campaign.state.displayName}"></td>
-            <td><img class="img-thumbnail"
+            <td><img class="img-thumbnail img-table-size"
                      th:if="${campaign.campaignImageFileName != null && campaign.campaignImageFileName != ''}"
                      th:src="@{~/images(fileName=${campaign.campaignImageFileName})}" src=""/></td>
             <td width="28%">
-                <center>
-                    <form th:action="@{/campaign-manager/campaigns/} + ${campaign.id}" method="get">
-                        <input class="btn btn-link" th:value="#{campaign.overview.functions.view}" type="submit"/>
-                    </form>
-                    <form th:action="@{/campaign-manager/campaigns/update/} + ${campaign.id}" method="get"
-                          th:if="${campaign.state.displayName} != 'Archived'">
-                        <input class="btn btn-link" th:value="#{campaign.overview.functions.edit}" type="submit"/>
-                    </form>
-                    <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/' + ${campaign.state.displayName == 'Active' ? 'inactive' : 'active'}"
-                          th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
-                        <input class="btn btn-link"
-                               th:value="${campaign.state.displayName == 'Active'} ? #{campaign.overview.functions.state.deactivate} : #{campaign.overview.functions.state.activate}"
-                               type="submit"/>
-                    </form>
-                    <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/archived'"
-                          th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
-                        <input class="btn btn-link" th:value="#{campaign.overview.functions.state.archive}"
-                               type="submit"/>
-                    </form>
-                </center>
+                <form th:action="@{/campaigns/} + ${campaign.id}" method="get">
+                    <input class="btn btn-link" th:value="#{campaign.overview.functions.view}" type="submit"/>
+                </form>
+                <form th:action="@{/campaign-manager/campaigns/update/} + ${campaign.id}" method="get"
+                      th:if="${campaign.state.displayName} != 'Archived'">
+                    <input class="btn btn-link" th:value="#{campaign.overview.functions.edit}" type="submit"/>
+                </form>
+                <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/' + ${campaign.state.displayName == 'Active' ? 'inactive' : 'active'}"
+                      th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
+                    <input class="btn btn-link"
+                           th:value="${campaign.state.displayName == 'Active'} ? #{campaign.overview.functions.state.deactivate} : #{campaign.overview.functions.state.activate}"
+                           type="submit"/>
+                </form>
+                <form th:action="@{/campaign-manager/campaigns/update/state/} + ${campaign.id} + '/archived'"
+                      th:method="patch" th:if="${campaign.state.displayName} != 'Archived'">
+                    <input class="btn btn-link" th:value="#{campaign.overview.functions.state.archive}"
+                           type="submit"/>
+                </form>
             </td>
         </tr>
         </tbody>

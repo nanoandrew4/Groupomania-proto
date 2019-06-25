@@ -72,6 +72,11 @@ public abstract class DefaultCampaignService implements CampaignService {
 
 	@Override
 	public Campaign getCampaignById(final Long id) {
+		return campaignRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public Campaign getCampaignByIdAndSessionUser(final Long id) {
 		final Optional<Campaign> campaign = campaignRepository.findById(id);
 		if (campaign.isPresent() && campaign.get().getOwner().getId().equals(sessionService.getSessionUser().getId()))
 			return campaign.get();

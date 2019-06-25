@@ -25,7 +25,7 @@ public class OfferCampaignValidator implements Validator {
 
 		campaignValidator.validate(offerCampaignForm, errors);
 
-		if (offerCampaignForm.getDiscountedPrice() == null && offerCampaignForm.getPercentDiscount() == null)
+		if (CampaignValidator.parseDouble(offerCampaignForm.getDiscountedPrice()) == null && CampaignValidator.parseDouble(offerCampaignForm.getPercentDiscount()) == null)
 			errors.reject("err.campaign.offer.discountedPriceOrPercent");
 	}
 }

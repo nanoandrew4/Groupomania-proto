@@ -19,6 +19,8 @@ public interface CampaignService {
 
 	Campaign getCampaignById(final Long id);
 
+	Campaign getCampaignByIdAndSessionUser(final Long id);
+
 	List<Campaign> getAllCampaignsForCurrentUser();
 
 	List<Campaign> getAllCampaigns();
