@@ -110,7 +110,7 @@
         <input class="form-control" th:field="*{discountedPrice}"
                th:attrappend="readonly=${readonly != null} ? 'readonly' : ''"/>
     </div>
-    <script type="text/javascript">
+    <script type="text/javascript" th:if="${readonly == null}">
             $(function () {
                  $('.input-group.date').datepicker({format: "yyyy-mm-dd"});
             });
