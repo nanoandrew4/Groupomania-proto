@@ -1,22 +1,23 @@
-table#campaignManagementOverview tr td a.button {
+table tr td a.button {
     display: none;
 }
 
-table#campaignManagementOverview tr:hover td a.button {
+table tr:hover td a.button {
     display:inline-block;
 }
 
-table#campaignManagementOverview tr td form {
+table tr td form {
     display: none;
 }
 
-table#campaignManagementOverview tr:hover td form {
+table tr:hover td form {
     display:inline-block;
 }
 
 tr:nth-of-type(odd) {
   background: #eee;
 }
+
 th {
   background: #333;
   color: white;

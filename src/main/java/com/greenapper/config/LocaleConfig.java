@@ -10,6 +10,10 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+/**
+ * Intercepts requests made to change language, to any page, using the '?lang=' parameter. The changes are associated
+ * with the session, so that the user can use their selected language for the duration of their visit.
+ */
 @Configuration
 public class LocaleConfig implements WebMvcConfigurer {
 

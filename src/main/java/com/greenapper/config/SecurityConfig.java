@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
+/**
+ * Configures the security of the application, using Spring Security. Determines the access controls for the specified
+ * endpoints, contains the password encoder to be used by the application, and configures the global authentication protocol.
+ */
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 

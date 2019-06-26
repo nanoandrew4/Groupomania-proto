@@ -1,6 +1,7 @@
 package com.greenapper.controllers;
 
 import com.greenapper.forms.campaigns.CampaignForm;
+import com.greenapper.models.CampaignManager;
 import com.greenapper.models.PasswordUpdate;
 import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.services.CampaignManagerService;
@@ -18,6 +19,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Predicate;
 
+/**
+ * Controller that handles all operations related to the {@link CampaignManager} type. Also handles methods relating
+ * to a specified managers campaigns.
+ */
 @Controller
 public class CampaignManagerController {
 
@@ -47,11 +52,25 @@ public class CampaignManagerController {
 	@Autowired
 	private CampaignManagerService campaignManagerService;
 
+	/**
+	 * Retrieves the password update page.
+	 *
+	 * @param passwordUpdate The password update model that will be filled in on the frontend
+	 * @return The password update page
+	 */
 	@GetMapping(PASSWORD_UPDATE_URI)
 	public String resetPassword(final PasswordUpdate passwordUpdate) {
 		return PASSWORD_UPDATE_FORM;
 	}
 
+	/**
+	 * Initiates the password update process, and either redirects to the users previous page if the update was
+	 * successful, or returns the encountered validation errors alongside the password update page.
+	 *
+	 * @param passwordUpdate New password information to be passed on to the service layer for validation and update
+	 * @param errors         Errors associated with the accompanying form, which will be populated if any validation errors are encountered in the service layer
+	 * @return Redirect to the users previous page if the update was successful, or returns the encountered validation errors alongside the password update page
+	 */
 	@PatchMapping(PASSWORD_UPDATE_URI)
 	public String updatePassword(final PasswordUpdate passwordUpdate, final Errors errors) {
 		campaignManagerService.updatePassword(passwordUpdate, errors);
@@ -63,12 +82,25 @@ public class CampaignManagerController {
 		}
 	}
 
+	/**
+	 * Retrieves the campaign manager overview page, from which management and creation of campaigns takes place.
+	 *
+	 * @param model Model to which the campaigns associated with the {@link CampaignManager} in session will be attached to
+	 * @return The campaign overview page
+	 */
 	@GetMapping(CAMPAIGNS_OVERVIEW_URI)
 	public String getCampaignOverview(final Model model) {
 		model.addAttribute("campaigns", campaignManagerService.getCampaigns());
 		return CAMPAIGNS_OVERVIEW_FORM;
 	}
 
+	/**
+	 * Retrieves a {@link Campaign} and converts it to a {@link CampaignForm} for editing by a {@link CampaignManager}.
+	 *
+	 * @param model Model to which the retrieved {@link CampaignForm} will be attached
+	 * @param id    Id of the campaign to retrieve for editing
+	 * @return Campaign update page for the appropriate campaign type if the request campaign exists, otherwise will redirect to the default campaign creation page
+	 */
 	@GetMapping(CAMPAIGN_UPDATE_URI)
 	public String getCampaignForEditById(final Model model, @PathVariable final Long id) {
 		final Predicate<Campaign> findById = campaign -> campaign.getId().equals(id);
@@ -79,7 +111,7 @@ public class CampaignManagerController {
 				final Class<?> campaignModel = Class.forName(Campaign.class.getPackage().getName() + "." + campaign.getType().displayName + "Campaign");
 				final CampaignForm campaignForm = (CampaignForm) Class.forName(CampaignForm.class.getPackage().getName() + "." + campaign.getType().displayName + "CampaignForm").getConstructor(campaignModel).newInstance(campaign);
 				model.addAttribute("campaignForm", campaignForm);
-				return CampaignController.getFormForCampaignType(campaign.getType().displayName);
+				return CampaignController.getPageForCampaignType(campaign.getType().displayName);
 			} catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
 				LOG.error("Error creating campaign form for type: \'" + campaign.getType().displayName + "\'", e);
 			}
@@ -88,6 +120,13 @@ public class CampaignManagerController {
 		return CampaignController.CAMPAIGN_CREATION_DEFAULT_REDIRECTION;
 	}
 
+	/**
+	 * Updates the state of the campaign associated to the supplied ID, if it exists.
+	 *
+	 * @param id    ID of the campaign whose state to update
+	 * @param state New state for the campaign
+	 * @return Redirect to the campaign manager overview page
+	 */
 	@PatchMapping(CAMPAIGN_STATE_UPDATE_URI)
 	public String updateCampaignState(@PathVariable final Long id, @PathVariable final String state) {
 		campaignService.updateCampaignState(id, state);

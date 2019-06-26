@@ -239,7 +239,7 @@ public class CampaignIntegrationTest {
 	}
 
 	private void performStandardKOAssertions(final Errors errors, final List<String> expectedErrorCodes, final String actualReturnString) {
-		assertEquals(CampaignController.getFormForCampaignType("offer"), actualReturnString);
+		assertEquals(CampaignController.getPageForCampaignType("offer"), actualReturnString);
 		assertEquals(expectedErrorCodes.size(), errors.getErrorCount());
 		for (String errorCode : expectedErrorCodes)
 			assertTrue(errors.getAllErrors().stream().map(DefaultMessageSourceResolvable::getCode).anyMatch(errorCode::equals));

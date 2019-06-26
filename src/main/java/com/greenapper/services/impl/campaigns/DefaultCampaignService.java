@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +67,11 @@ public abstract class DefaultCampaignService implements CampaignService {
 	public void updateCampaignState(final Long id, final String state) {
 		campaignRepository.findById(id).ifPresent(campaign -> {
 			campaign.setState(CampaignState.valueOf(state.toUpperCase()));
+			if (campaign.getState() == CampaignState.ARCHIVED) {
+				if (LocalDate.now().isBefore(campaign.getStartDate()))
+					campaign.setStartDate(LocalDate.now());
+				campaign.setEndDate(LocalDate.now());
+			}
 			campaignManagerService.addCampaignToCurrentUser(campaign);
 		});
 	}
