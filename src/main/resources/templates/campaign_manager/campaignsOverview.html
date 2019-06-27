@@ -40,7 +40,11 @@
                 <td th:text="${campaign.state.displayName}"></td>
                 <td><img class="img-thumbnail img-table-size"
                          th:if="${campaign.campaignImageFilePath != null && campaign.campaignImageFilePath != ''}"
-                         th:src="@{~/images(fileName=${campaign.campaignImageFilePath})}" src=""/></td>
+                         th:src="@{~/images(fileName=${campaign.campaignImageFilePath})}" src=""/>
+                    <div style="width:200px"
+                         th:unless="${campaign.campaignImageFilePath != null && campaign.campaignImageFilePath != ''}">
+                    </div>
+                </td>
                 <td width="28%">
                     <form th:action="@{/campaigns/} + ${campaign.id}" method="get">
                         <input class="btn btn-link" th:value="#{campaign.overview.functions.view}" type="submit"/>

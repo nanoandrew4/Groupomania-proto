@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/campaigns/**").access("hasRole('CAMPAIGN_MANAGER')")
+				.antMatchers("/campaigns/*/**").access("hasRole('CAMPAIGN_MANAGER')")
 				.antMatchers("/campaign-manager/**").access("hasRole('CAMPAIGN_MANAGER')")
 				.antMatchers("/campaigns", "/login", "/campaigns/{id}").permitAll()
 				.and()
