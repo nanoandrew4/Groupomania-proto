@@ -26,7 +26,7 @@ public class CampaignManagerProfile {
 	@Transient
 	private MultipartFile profileImage;
 
-	private String profileImageFileName;
+	private String profileImageFilePath;
 
 	public Long getId() {
 		return id;
@@ -76,11 +76,11 @@ public class CampaignManagerProfile {
 		this.profileImage = profileImage;
 	}
 
-	public String getProfileImageFileName() {
-		return profileImageFileName;
+	public String getProfileImageFilePath() {
+		return profileImageFilePath;
 	}
 
-	public void setProfileImageFilePath(String profileImageFileName) {
-		this.profileImageFileName = profileImageFileName;
+	public void setProfileImageFilePath(String profileImageFilePath) {
+		this.profileImageFilePath = profileImageFilePath;
 	}
 }

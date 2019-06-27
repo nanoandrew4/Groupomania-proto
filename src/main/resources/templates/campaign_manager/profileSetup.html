@@ -22,7 +22,7 @@
 
             <div class="form-group">
                 <div hidden="hidden">
-                    <input class="form-control" th:field="*{profileImageFileName}"/>
+                    <input class="form-control" th:field="*{profileImageFilePath}"/>
                 </div>
                 <div class="form-group">
                     <label th:text="#{profile.update.name}">Name</label>
@@ -39,9 +39,9 @@
                 <div class="form-group">
                     <label th:text="#{profile.update.image}">Profile picture</label>
                     <br/>
-                    <img th:if="*{profileImageFileName != null && profileImageFileName != ''}" src=""
+                    <img th:if="*{profileImageFilePath != null && profileImageFilePath != ''}" src=""
                          alt="Profile Image"
-                         th:src="@{~/images(fileName=*{profileImageFileName})}"
+                         th:src="@{~/images(fileName=*{profileImageFilePath})}"
                          class="img-thumbnail"/>
                     <input accept="image/x-png,image/jpeg,image/jpg" type="file" name="profileImage"/>
                 </div>

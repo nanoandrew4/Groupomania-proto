@@ -37,7 +37,7 @@
         <input class="form-control" th:field="*{state}"/>
     </div>
     <div hidden="hidden">
-        <input class="form-control" th:field="*{campaignImageFileName}"/>
+        <input class="form-control" th:field="*{campaignImageFilePath}"/>
     </div>
     <div class="form-group">
         <label th:text="#{campaign.title}">Title</label>
@@ -51,8 +51,8 @@
     </div>
     <div class="form-group">
         <label th:text="#{campaign.image}">Campaign image</label>
-        <img th:if="*{campaignImageFileName != null && campaignImageFileName != ''}"
-             th:src="@{~/images(fileName=*{campaignImageFileName})}"
+        <img th:if="*{campaignImageFilePath != null && campaignImageFilePath != ''}"
+             th:src="@{~/images(fileName=*{campaignImageFilePath})}"
              class="img-thumbnail img-thumbnail-size">
         <input accept="image/x-png,image/jpeg,image/jpg" type="file" name="campaignImage"
                th:attrappend="disabled=${readonly != null} ? 'disabled' : ''"/>

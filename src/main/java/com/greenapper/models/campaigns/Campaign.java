@@ -30,7 +30,7 @@ public abstract class Campaign {
 
 	private String description;
 
-	private String campaignImageFileName;
+	private String campaignImageFilePath;
 
 	private CampaignType type;
 
@@ -58,7 +58,7 @@ public abstract class Campaign {
 		this.id = campaignForm.getId();
 		this.title = campaignForm.getTitle();
 		this.description = campaignForm.getDescription();
-		this.campaignImageFileName = campaignForm.getCampaignImageFileName();
+		this.campaignImageFilePath = campaignForm.getCampaignImageFilePath();
 		this.type = campaignForm.getType();
 		this.state = campaignForm.getState();
 		this.startDate = LocalDate.parse(campaignForm.getStartDate());
@@ -183,11 +183,11 @@ public abstract class Campaign {
 		this.discountedPrice = discountedPrice;
 	}
 
-	public String getCampaignImageFileName() {
-		return campaignImageFileName;
+	public String getCampaignImageFilePath() {
+		return campaignImageFilePath;
 	}
 
-	public void setCampaignImageFilePath(String campaignImageFileName) {
-		this.campaignImageFileName = campaignImageFileName;
+	public void setCampaignImageFilePath(String campaignImageFilePath) {
+		this.campaignImageFilePath = campaignImageFilePath;
 	}
 }

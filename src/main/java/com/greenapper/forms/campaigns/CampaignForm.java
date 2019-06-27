@@ -18,7 +18,7 @@ public abstract class CampaignForm {
 
 	private MultipartFile campaignImage;
 
-	private String campaignImageFileName;
+	private String campaignImageFilePath;
 
 	private CampaignType type;
 
@@ -45,7 +45,7 @@ public abstract class CampaignForm {
 		this.id = campaign.getId();
 		this.title = campaign.getTitle();
 		this.description = campaign.getDescription();
-		this.campaignImageFileName = campaign.getCampaignImageFileName();
+		this.campaignImageFilePath = campaign.getCampaignImageFilePath();
 		this.type = campaign.getType();
 		this.state = campaign.getState();
 		this.startDate = String.valueOf(campaign.getStartDate());
@@ -153,12 +153,12 @@ public abstract class CampaignForm {
 		this.discountedPrice = discountedPrice;
 	}
 
-	public String getCampaignImageFileName() {
-		return campaignImageFileName;
+	public String getCampaignImageFilePath() {
+		return campaignImageFilePath;
 	}
 
-	public void setCampaignImageFileName(String campaignImageFileName) {
-		this.campaignImageFileName = campaignImageFileName;
+	public void setCampaignImageFilePath(String campaignImageFilePath) {
+		this.campaignImageFilePath = campaignImageFilePath;
 	}
 
 	public CampaignState getState() {
