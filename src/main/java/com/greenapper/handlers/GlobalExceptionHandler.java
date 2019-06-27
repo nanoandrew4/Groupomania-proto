@@ -10,6 +10,10 @@ import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Serves as a logger for all exceptions thrown inside the application, but delegates exception resolution to
+ * the default Spring error handlers.
+ */
 @Component
 @Order(0)
 public class GlobalExceptionHandler extends AbstractHandlerExceptionResolver {

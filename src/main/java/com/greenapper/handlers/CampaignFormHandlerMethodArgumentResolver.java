@@ -16,18 +16,25 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.ServletRequest;
 import java.util.Map;
 
+/**
+ * Resolves method argument ambiguities when {@link CampaignForm} is used in method signatures at the controller level,
+ * since this class cannot be instantiated, due to it being abstract. This resolver searches the generic campaign form
+ * and extracts its type, and through reflection creates the appropriate campaign form that should be used in
+ * each specific call.
+ */
 public class CampaignFormHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Override
-	public boolean supportsParameter(MethodParameter methodParameter) {
+	public boolean supportsParameter(final MethodParameter methodParameter) {
 		return methodParameter.getParameterType().equals(CampaignForm.class);
 	}
 
 	@Override
-	public Object resolveArgument(MethodParameter methodParameter,
-								  ModelAndViewContainer modelAndViewContainer,
-								  NativeWebRequest nativeWebRequest,
-								  WebDataBinderFactory webDataBinderFactory) throws Exception {
+	public Object resolveArgument(final MethodParameter methodParameter,
+								  final ModelAndViewContainer modelAndViewContainer,
+								  final NativeWebRequest nativeWebRequest,
+								  final WebDataBinderFactory webDataBinderFactory) throws Exception {
+
 		final String campaignType = nativeWebRequest.getParameter("type");
 
 		final String name = ModelFactory.getNameForParameter(methodParameter);
@@ -39,6 +46,7 @@ public class CampaignFormHandlerMethodArgumentResolver implements HandlerMethodA
 		} else
 			campaignForm = new OfferCampaignForm();
 
+		// Code borrowed from the default Spring method argument resolver, which is used to bind the form to an Errors instance for this request
 		final WebDataBinder binder = webDataBinderFactory.createBinder(nativeWebRequest, campaignForm, name);
 		bindParameters(nativeWebRequest, binder);
 		final BindingResult bindingResult = binder.getBindingResult();

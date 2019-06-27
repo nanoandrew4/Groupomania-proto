@@ -1,8 +1,8 @@
 package com.greenapper.services.impl;
 
 import com.greenapper.config.SecurityConfig;
+import com.greenapper.forms.PasswordUpdateForm;
 import com.greenapper.models.CampaignManager;
-import com.greenapper.models.PasswordUpdate;
 import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.repositories.CampaignManagerRepository;
 import com.greenapper.services.CampaignManagerService;
@@ -37,11 +37,11 @@ public class DefaultCampaignManagerService implements CampaignManagerService {
 	}
 
 	@Override
-	public void updatePassword(final PasswordUpdate passwordUpdate, final Errors errors) {
-		passwordUpdateValidator.validate(passwordUpdate, errors);
+	public void updatePassword(final PasswordUpdateForm passwordUpdateForm, final Errors errors) {
+		passwordUpdateValidator.validate(passwordUpdateForm, errors);
 		if (!errors.hasErrors()) {
 			final CampaignManager sessionUser = getSessionCampaignManager();
-			sessionUser.setPassword(securityConfig.getPasswordEncoder().encode(passwordUpdate.getNewPassword()));
+			sessionUser.setPassword(securityConfig.getPasswordEncoder().encode(passwordUpdateForm.getNewPassword()));
 			sessionUser.setPasswordChangeRequired(false);
 			campaignManagerRepository.save(sessionUser);
 		}

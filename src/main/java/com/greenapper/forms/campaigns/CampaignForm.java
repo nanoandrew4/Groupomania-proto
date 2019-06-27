@@ -5,6 +5,10 @@ import com.greenapper.enums.CampaignType;
 import com.greenapper.models.campaigns.Campaign;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Generic campaign form to be sent from the frontend to the backend. Numeric and date fields are stored as strings,
+ * so that validations can be performed in the backend.
+ */
 public abstract class CampaignForm {
 	private Long id;
 

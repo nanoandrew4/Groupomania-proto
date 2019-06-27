@@ -1,8 +1,8 @@
 package com.greenapper.validators;
 
 import com.greenapper.config.SecurityConfig;
+import com.greenapper.forms.PasswordUpdateForm;
 import com.greenapper.models.CampaignManager;
-import com.greenapper.models.PasswordUpdate;
 import com.greenapper.models.User;
 import com.greenapper.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +32,15 @@ public class PasswordUpdateValidator implements Validator {
 			return;
 		}
 
-		final PasswordUpdate passwordUpdate = (PasswordUpdate) target;
+		final PasswordUpdateForm passwordUpdateForm = (PasswordUpdateForm) target;
 		final User sessionUser = sessionService.getSessionUser();
 		final PasswordEncoder pwdEncoder = securityConfig.getPasswordEncoder();
 
-		if (pwdEncoder.matches(passwordUpdate.getNewPassword(), sessionUser.getPassword()))
+		if (pwdEncoder.matches(passwordUpdateForm.getNewPassword(), sessionUser.getPassword()))
 			errors.reject("err.password.samepassword");
-		else if (passwordUpdate.getNewPassword().length() < 6)
+		else if (passwordUpdateForm.getNewPassword().length() < 6)
 			errors.reject("err.password.length");
-		else if (!pwdEncoder.matches(passwordUpdate.getOldPassword(), sessionUser.getPassword()))
+		else if (!pwdEncoder.matches(passwordUpdateForm.getOldPassword(), sessionUser.getPassword()))
 			errors.reject("err.password.mismatch");
 	}
 }

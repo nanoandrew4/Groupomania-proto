@@ -46,7 +46,8 @@ public class DefaultCampaignManagerProfileService implements CampaignManagerProf
 			if (campaignManager.isPresent()) {
 				updatedProfile.setId(campaignManager.get().getId());
 
-				updatedProfile.setProfileImageFileName(fileSystemStorageService.saveImage(updatedProfile.getProfileImage(), updatedProfile.getProfileImageFileName()));
+				final String profileImagePath = fileSystemStorageService.saveImage(updatedProfile.getProfileImage());
+				Optional.ofNullable(profileImagePath).ifPresent(updatedProfile::setProfileImageFilePath);
 
 				campaignManager.get().setCampaignManagerProfile(updatedProfile);
 				campaignManagerRepository.save(campaignManager.get());

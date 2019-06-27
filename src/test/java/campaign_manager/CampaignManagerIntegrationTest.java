@@ -2,8 +2,8 @@ package campaign_manager;
 
 import com.greenapper.Main;
 import com.greenapper.controllers.CampaignManagerController;
+import com.greenapper.forms.PasswordUpdateForm;
 import com.greenapper.models.CampaignManager;
-import com.greenapper.models.PasswordUpdate;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.SessionService;
 import org.junit.Before;
@@ -44,12 +44,12 @@ public class CampaignManagerIntegrationTest {
 
 	@Test
 	public void updatePasswordOldPasswordInvalid() {
-		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
-		passwordUpdate.setOldPassword("wrongpass");
-		passwordUpdate.setNewPassword("12345678");
+		final PasswordUpdateForm passwordUpdateForm = new PasswordUpdateForm();
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdateForm, "passwordUpdateForm");
+		passwordUpdateForm.setOldPassword("wrongpass");
+		passwordUpdateForm.setNewPassword("12345678");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
+		final String ret = campaignManagerController.updatePassword(passwordUpdateForm, errors);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_FORM, ret);
 		assertEquals(1, errors.getErrorCount());
@@ -58,12 +58,12 @@ public class CampaignManagerIntegrationTest {
 
 	@Test
 	public void updatePasswordLessThan6Chars() {
-		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
-		passwordUpdate.setOldPassword("testing");
-		passwordUpdate.setNewPassword("12345");
+		final PasswordUpdateForm passwordUpdateForm = new PasswordUpdateForm();
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdateForm, "passwordUpdateForm");
+		passwordUpdateForm.setOldPassword("testing");
+		passwordUpdateForm.setNewPassword("12345");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
+		final String ret = campaignManagerController.updatePassword(passwordUpdateForm, errors);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_FORM, ret);
 		assertEquals(1, errors.getErrorCount());
@@ -72,12 +72,12 @@ public class CampaignManagerIntegrationTest {
 
 	@Test
 	public void updatePasswordSamePassword() {
-		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
-		passwordUpdate.setOldPassword("testing");
-		passwordUpdate.setNewPassword("testing");
+		final PasswordUpdateForm passwordUpdateForm = new PasswordUpdateForm();
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdateForm, "passwordUpdateForm");
+		passwordUpdateForm.setOldPassword("testing");
+		passwordUpdateForm.setNewPassword("testing");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
+		final String ret = campaignManagerController.updatePassword(passwordUpdateForm, errors);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_FORM, ret);
 		assertEquals(1, errors.getErrorCount());
@@ -87,12 +87,12 @@ public class CampaignManagerIntegrationTest {
 	@Test
 	@DirtiesContext
 	public void updatePasswordSuccessfully() {
-		final PasswordUpdate passwordUpdate = new PasswordUpdate();
-		final Errors errors = new BeanPropertyBindingResult(passwordUpdate, "passwordUpdate");
-		passwordUpdate.setOldPassword("testing");
-		passwordUpdate.setNewPassword("newpassword");
+		final PasswordUpdateForm passwordUpdateForm = new PasswordUpdateForm();
+		final Errors errors = new BeanPropertyBindingResult(passwordUpdateForm, "passwordUpdateForm");
+		passwordUpdateForm.setOldPassword("testing");
+		passwordUpdateForm.setNewPassword("newpassword");
 
-		final String ret = campaignManagerController.updatePassword(passwordUpdate, errors);
+		final String ret = campaignManagerController.updatePassword(passwordUpdateForm, errors);
 
 		assertEquals(CampaignManagerController.PASSWORD_UPDATE_SUCCESS_REDIRECT, ret);
 		assertFalse(errors.hasErrors());

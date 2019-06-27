@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 import javax.servlet.*;
 import java.io.IOException;
 
+/**
+ * Intercepts all requests and sets the authenticated user in session so that it can be retrieved from memory
+ * throughout the call by use of the {@link SessionService}, without having to always go to the DB to fetch it.
+ */
 @Component
 @Order(0)
 public class SessionFilter implements Filter {

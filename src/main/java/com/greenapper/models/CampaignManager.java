@@ -5,6 +5,9 @@ import com.greenapper.models.campaigns.Campaign;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Model for campaign manager users, which extends from the generic {@link User} model.
+ */
 @Entity
 @Table(name = "CampaignManager")
 public class CampaignManager extends User {
@@ -21,8 +24,9 @@ public class CampaignManager extends User {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		final CampaignManager otherManager = (CampaignManager) o;
-		return getId() != null || (otherManager.getId() == null && getId().equals(otherManager.getId()));
-//		return username.equals(otherManager.getUsername()) || campaignManagerProfile.getEmail().equals(otherManager.getCampaignManagerProfile().getEmail());
+		return getId() != null || (otherManager.getId() == null && getId().equals(otherManager.getId())) ||
+			   getUsername().equals(otherManager.getUsername()) ||
+			   campaignManagerProfile.getEmail().equals(otherManager.getCampaignManagerProfile().getEmail());
 	}
 
 	public List<Campaign> getCampaigns() {

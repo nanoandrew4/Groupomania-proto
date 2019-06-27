@@ -4,6 +4,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
+/**
+ * Model for campaign manager profiles, which are associated to a {@link CampaignManager}.
+ */
 @Entity(name = "CampaignManagerProfile")
 @Table(name = "CampaignManagerProfile")
 public class CampaignManagerProfile {
@@ -12,7 +15,7 @@ public class CampaignManagerProfile {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
-	private CampaignManager campaignManager;
+	private User campaignManager;
 
 	private String name;
 
@@ -34,10 +37,10 @@ public class CampaignManagerProfile {
 	}
 
 	public CampaignManager getCampaignManager() {
-		return campaignManager;
+		return (CampaignManager) campaignManager;
 	}
 
-	public void setCampaignManager(CampaignManager campaignManager) {
+	public void setCampaignManager(User campaignManager) {
 		this.campaignManager = campaignManager;
 	}
 
@@ -77,7 +80,7 @@ public class CampaignManagerProfile {
 		return profileImageFileName;
 	}
 
-	public void setProfileImageFileName(String profileImageFileName) {
+	public void setProfileImageFilePath(String profileImageFileName) {
 		this.profileImageFileName = profileImageFileName;
 	}
 }

@@ -1,7 +1,7 @@
 package com.greenapper.services;
 
+import com.greenapper.forms.PasswordUpdateForm;
 import com.greenapper.models.CampaignManager;
-import com.greenapper.models.PasswordUpdate;
 import com.greenapper.models.campaigns.Campaign;
 import org.springframework.validation.Errors;
 
@@ -13,7 +13,7 @@ public interface CampaignManagerService {
 
 	void addCampaignToCurrentUser(final Campaign campaign);
 
-	void updatePassword(final PasswordUpdate passwordUpdate, final Errors errors);
+	void updatePassword(final PasswordUpdateForm passwordUpdateForm, final Errors errors);
 
 	List<Campaign> getCampaigns();
 

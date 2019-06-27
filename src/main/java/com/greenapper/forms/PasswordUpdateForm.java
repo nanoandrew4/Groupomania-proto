@@ -1,6 +1,9 @@
-package com.greenapper.models;
+package com.greenapper.forms;
 
-public class PasswordUpdate {
+/**
+ * Form for password updating by users.
+ */
+public class PasswordUpdateForm {
 	private String oldPassword;
 
 	private String newPassword;

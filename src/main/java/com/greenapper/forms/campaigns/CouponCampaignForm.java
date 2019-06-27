@@ -3,6 +3,10 @@ package com.greenapper.forms.campaigns;
 import com.greenapper.enums.CampaignType;
 import com.greenapper.models.campaigns.CouponCampaign;
 
+/**
+ * Form for {@link CouponCampaign} campaigns. Contains all fields necessary to create a {@link CouponCampaign},
+ * with numeric and date fields being stored as strings for validation prior to being converted.
+ */
 public class CouponCampaignForm extends CampaignForm {
 	private String couponDescription;
 
@@ -20,6 +24,11 @@ public class CouponCampaignForm extends CampaignForm {
 		this.setType(CampaignType.COUPON);
 	}
 
+	/**
+	 * Creates a {@link CouponCampaignForm} with the data from the supplied {@link CouponCampaign}.
+	 *
+	 * @param couponCampaign Campaign model from which to copy the data
+	 */
 	public CouponCampaignForm(final CouponCampaign couponCampaign) {
 		super(couponCampaign);
 		this.couponDescription = couponCampaign.getCouponDescription();

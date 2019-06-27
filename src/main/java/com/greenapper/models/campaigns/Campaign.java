@@ -9,6 +9,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Generic model for all campaign types to extend from, contains all the generic fields that should be applicable
+ * to all campaign types.
+ */
 @Entity
 @Inheritance(
 		strategy = InheritanceType.JOINED
@@ -183,7 +187,7 @@ public abstract class Campaign {
 		return campaignImageFileName;
 	}
 
-	public void setCampaignImageFileName(String campaignImageFileName) {
+	public void setCampaignImageFilePath(String campaignImageFileName) {
 		this.campaignImageFileName = campaignImageFileName;
 	}
 }

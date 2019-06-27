@@ -1,8 +1,8 @@
 package com.greenapper.controllers;
 
+import com.greenapper.forms.PasswordUpdateForm;
 import com.greenapper.forms.campaigns.CampaignForm;
 import com.greenapper.models.CampaignManager;
-import com.greenapper.models.PasswordUpdate;
 import com.greenapper.models.campaigns.Campaign;
 import com.greenapper.services.CampaignManagerService;
 import com.greenapper.services.CampaignService;
@@ -55,11 +55,11 @@ public class CampaignManagerController {
 	/**
 	 * Retrieves the password update page.
 	 *
-	 * @param passwordUpdate The password update model that will be filled in on the frontend
+	 * @param passwordUpdateForm The password update model that will be filled in on the frontend
 	 * @return The password update page
 	 */
 	@GetMapping(PASSWORD_UPDATE_URI)
-	public String resetPassword(final PasswordUpdate passwordUpdate) {
+	public String resetPassword(final PasswordUpdateForm passwordUpdateForm) {
 		return PASSWORD_UPDATE_FORM;
 	}
 
@@ -67,13 +67,13 @@ public class CampaignManagerController {
 	 * Initiates the password update process, and either redirects to the users previous page if the update was
 	 * successful, or returns the encountered validation errors alongside the password update page.
 	 *
-	 * @param passwordUpdate New password information to be passed on to the service layer for validation and update
+	 * @param passwordUpdateForm New password information to be passed on to the service layer for validation and update
 	 * @param errors         Errors associated with the accompanying form, which will be populated if any validation errors are encountered in the service layer
 	 * @return Redirect to the users previous page if the update was successful, or returns the encountered validation errors alongside the password update page
 	 */
 	@PatchMapping(PASSWORD_UPDATE_URI)
-	public String updatePassword(final PasswordUpdate passwordUpdate, final Errors errors) {
-		campaignManagerService.updatePassword(passwordUpdate, errors);
+	public String updatePassword(final PasswordUpdateForm passwordUpdateForm, final Errors errors) {
+		campaignManagerService.updatePassword(passwordUpdateForm, errors);
 
 		if (!errors.hasErrors())
 			return PASSWORD_UPDATE_SUCCESS_REDIRECT;

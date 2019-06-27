@@ -4,7 +4,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
-@MappedSuperclass
+/**
+ *
+ */
+@Entity
+@Inheritance(
+		strategy = InheritanceType.JOINED
+)
 public abstract class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

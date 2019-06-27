@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
+/**
+ * Model for coupon type campaigns, which extends from the generic {@link Campaign} model.
+ */
 @Entity
 @Table(name = "CouponCampaign")
 public class CouponCampaign extends Campaign {

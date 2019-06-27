@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Authority model which is used to stipulate a specific user role.
+ */
 @Entity
 public class Authority {
 	@Id

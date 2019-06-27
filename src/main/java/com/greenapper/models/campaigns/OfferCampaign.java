@@ -6,6 +6,9 @@ import com.greenapper.forms.campaigns.OfferCampaignForm;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * Model for offer type campaigns, which extends from the generic {@link Campaign} model.
+ */
 @Entity
 @Table(name = "OfferCampaign")
 public class OfferCampaign extends Campaign {

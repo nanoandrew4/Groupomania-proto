@@ -99,11 +99,6 @@ public abstract class DefaultCampaignService implements CampaignService {
 		return getSessionCampaignManager().getCampaigns();
 	}
 
-	@Override
-	public boolean isCampaignArchived(final Long id) {
-		return campaignRepository.getCampaignArchivedById(id);
-	}
-
 	public Optional<Campaign> createCampaignFromForm(final CampaignForm campaignForm) {
 		try {
 			final String fullClassName = Campaign.class.getPackage().getName() + "." + campaignForm.getType().displayName + "Campaign";
@@ -116,7 +111,8 @@ public abstract class DefaultCampaignService implements CampaignService {
 	}
 
 	private void saveCampaign(final Campaign campaign, final CampaignForm campaignForm) {
-		campaign.setCampaignImageFileName(fileSystemStorageService.saveImage(campaignForm.getCampaignImage(), campaignForm.getCampaignImageFileName()));
+		final String imagePath = fileSystemStorageService.saveImage(campaignForm.getCampaignImage());
+		Optional.ofNullable(imagePath).ifPresent(campaign::setCampaignImageFilePath);
 
 		campaignRepository.save(campaign);
 		campaignManagerService.addCampaignToCurrentUser(campaign);
