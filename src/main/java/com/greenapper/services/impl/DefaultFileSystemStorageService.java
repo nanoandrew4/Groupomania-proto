@@ -36,6 +36,10 @@ public class DefaultFileSystemStorageService implements FileSystemStorageService
 
 	private Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+	/**
+	 * Initializes the {@link MessageDigest} instance that will be used for hashing usernames and filenames for secure
+	 * storage of files on the filesystem.
+	 */
 	public DefaultFileSystemStorageService() {
 		try {
 			md = MessageDigest.getInstance("SHA-256");
@@ -50,6 +54,10 @@ public class DefaultFileSystemStorageService implements FileSystemStorageService
 			final String contentType = Objects.requireNonNull(image.getContentType()).replace("image/", "");
 			String relativeStoragePath = "";
 			try {
+				/*
+				 * Files are stored in a directory named after the hashed username, and the file name itself is hashed,
+				 * so that anonymous users cannot trivially retrieve any stored file.
+				 */
 				String hashedFileName = new String(Base64.getEncoder().encode(md.digest(image.getBytes()))).replaceAll("/", "?");
 				hashedFileName += "." + contentType;
 

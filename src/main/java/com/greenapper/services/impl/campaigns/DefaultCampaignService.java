@@ -99,7 +99,14 @@ public abstract class DefaultCampaignService implements CampaignService {
 		return getSessionCampaignManager().getCampaigns();
 	}
 
-	public Optional<Campaign> createCampaignFromForm(final CampaignForm campaignForm) {
+	/**
+	 * Creates a {@link Campaign} subclass from a {@link CampaignForm} subclass, through the use of reflection.
+	 * The created campaign will be of the same type as the supplied campaign form.
+	 *
+	 * @param campaignForm Campaign form from which to create the campaign model
+	 * @return The newly created campaign model wrapped in an optional, or an empty optional if reflection failed
+	 */
+	private Optional<Campaign> createCampaignFromForm(final CampaignForm campaignForm) {
 		try {
 			final String fullClassName = Campaign.class.getPackage().getName() + "." + campaignForm.getType().displayName + "Campaign";
 			final String formClassName = CampaignForm.class.getPackage().getName() + "." + campaignForm.getType().displayName + "CampaignForm";
@@ -110,6 +117,15 @@ public abstract class DefaultCampaignService implements CampaignService {
 		}
 	}
 
+	/**
+	 * Saves the campaign image to the filesystem and associates it to the model if applicable, and saves the campaign
+	 * in the {@link CampaignRepository} as well as storing it in the campaign list of the {@link CampaignManager}
+	 * currently in session.
+	 *
+	 * @param campaign     Campaign model that will be persisted to the database
+	 * @param campaignForm Campaign form from which the model was created, which possibly contains the
+	 *                     {@link org.springframework.web.multipart.MultipartFile} that will be persisted to the file system
+	 */
 	private void saveCampaign(final Campaign campaign, final CampaignForm campaignForm) {
 		final String imagePath = fileSystemStorageService.saveImage(campaignForm.getCampaignImage());
 		Optional.ofNullable(imagePath).ifPresent(campaign::setCampaignImageFilePath);

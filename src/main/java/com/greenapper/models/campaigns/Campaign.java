@@ -78,6 +78,17 @@ public abstract class Campaign {
 		}
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+		if (o == null)
+			return false;
+		if (!(o instanceof Campaign))
+			return false;
+		if (id == null || ((Campaign) o).id == null)
+			return false;
+		return id.equals(((Campaign) o).id);
+	}
+
 	public Long getId() {
 		return id;
 	}

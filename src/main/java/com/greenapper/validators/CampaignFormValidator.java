@@ -10,14 +10,20 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * This validator contains validation logic applicable to all {@link Campaign} subtypes. All campaign subclass validators
+ * should first call the {{@link #validate(Object, Errors)}} method in this class in order to perform validation
+ * on the generic campaign fields, and then carry out validation on the campaign subclass fields in a custom validator
+ * designed for the specific campaign subclass.
+ */
 @Component
-public class CampaignValidator implements Validator {
+public class CampaignFormValidator implements Validator {
 
 	private static final Long MAX_STRING_LENGTH = 255L;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Campaign.class.equals(clazz);
+		return CampaignForm.class.equals(clazz);
 	}
 
 	public static void rejectIfNull(final Object value, final String errorCode, final Errors errors) {

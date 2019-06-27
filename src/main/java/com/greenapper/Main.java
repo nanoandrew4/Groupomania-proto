@@ -14,6 +14,7 @@ import java.util.List;
 public class Main implements WebMvcConfigurer {
 
 	@Override
+	// Adds the custom form argument resolver so that the abstract CampaignForm can be used in controller method signatures
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(new CampaignFormHandlerMethodArgumentResolver());
 	}

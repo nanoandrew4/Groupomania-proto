@@ -7,6 +7,9 @@ import org.springframework.validation.Validator;
 
 import java.util.regex.Pattern;
 
+/**
+ * This validator contains all the validation logic for {@link CampaignManagerProfile}.
+ */
 @Component
 public class CampaignManagerProfileValidator implements Validator {
 

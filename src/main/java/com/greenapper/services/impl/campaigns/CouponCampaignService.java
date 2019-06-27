@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 public class CouponCampaignService extends DefaultCampaignService {
 
 	@Resource
-	private Validator couponCampaignValidator;
+	private Validator couponCampaignFormValidator;
 
 	@Resource
 	private CampaignManagerProfileService campaignManagerProfileService;
@@ -23,7 +23,7 @@ public class CouponCampaignService extends DefaultCampaignService {
 	@Override
 	public void validateCampaign(final
 								 CampaignForm campaignForm, final Errors errors) {
-		couponCampaignValidator.validate(campaignForm, errors);
+		couponCampaignFormValidator.validate(campaignForm, errors);
 	}
 
 	@Override

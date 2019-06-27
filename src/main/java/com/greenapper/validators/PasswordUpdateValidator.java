@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * This validator performs validations on the password update form, to ensure that the password update process integrity
+ * is not compromised and that the specified password rules are followed.
+ */
 @Component
 public class PasswordUpdateValidator implements Validator {
 

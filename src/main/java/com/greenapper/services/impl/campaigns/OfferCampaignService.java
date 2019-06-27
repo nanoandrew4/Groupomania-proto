@@ -14,11 +14,11 @@ import javax.annotation.Resource;
 public class OfferCampaignService extends DefaultCampaignService {
 
 	@Resource
-	private Validator offerCampaignValidator;
+	private Validator offerCampaignFormValidator;
 
 	@Override
 	public void validateCampaign(final CampaignForm campaign, final Errors errors) {
-		offerCampaignValidator.validate(campaign, errors);
+		offerCampaignFormValidator.validate(campaign, errors);
 	}
 
 	@Override

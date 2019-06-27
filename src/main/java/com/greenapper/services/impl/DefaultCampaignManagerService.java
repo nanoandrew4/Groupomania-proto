@@ -50,7 +50,7 @@ public class DefaultCampaignManagerService implements CampaignManagerService {
 	@Override
 	public void addCampaignToCurrentUser(final Campaign campaign) {
 		final CampaignManager campaignManager = getSessionCampaignManager();
-		campaignManager.getCampaigns().removeIf(campaign1 -> campaign1.getId().equals(campaign.getId()));
+		campaignManager.getCampaigns().removeIf(campaign::equals);
 		campaignManager.getCampaigns().add(campaign);
 		campaignManagerRepository.save(campaignManager);
 	}
