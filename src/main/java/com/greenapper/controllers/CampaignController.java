@@ -138,7 +138,7 @@ public class CampaignController {
 		final List<Campaign> campaigns = campaignService.getAllCampaigns();
 
 		campaigns.removeIf(campaign -> campaign.getState() == CampaignState.INACTIVE);
-		campaigns.removeIf(campaign -> campaign.isShowAfterExpiration() && LocalDate.now().plus(4, ChronoUnit.DAYS).isAfter(campaign.getEndDate()));
+		campaigns.removeIf(campaign -> campaign.isShowAfterExpiration() && LocalDate.now().isAfter(campaign.getEndDate().plus(4, ChronoUnit.DAYS)));
 		campaigns.removeIf(campaign -> !campaign.isShowAfterExpiration() && LocalDate.now().isAfter(campaign.getEndDate()));
 
 		model.addAttribute("campaigns", campaigns);
