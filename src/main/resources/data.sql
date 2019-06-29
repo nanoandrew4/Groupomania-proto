@@ -16,11 +16,10 @@ insert into campaign (id, title, description, type, state, start_date, end_date,
 insert into offer_Campaign (id) values
 (1),
 (2),
-(3),
-(4);
+(3);
 
 insert into coupon_Campaign (id, coupon_start_date, coupon_end_date, campaign_manager_name, campaign_manager_email) values
-(2, '2019-07-01', '2019-07-04', 'SampleManagerName', 'samplemanager@email.com');
+(4, '2019-07-01', '2019-07-04', 'SampleManagerName', 'samplemanager@email.com');
 
 insert into authority(id, authority) values
 (1, 'ROLE_CAMPAIGN_MANAGER');
