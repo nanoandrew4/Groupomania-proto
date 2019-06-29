@@ -119,7 +119,11 @@ public class CampaignController {
 			LOG.error("An error occurred while trying to get the service for the supplied campaign", e);
 			errors.reject("err.campaign.type");
 		}
-		return getPageForCampaignType(campaignForm.getType().displayName);
+
+		if (campaignForm.getType() != null)
+			return getPageForCampaignType(campaignForm.getType().displayName);
+		else
+			return getPageForCampaignType("offer");
 	}
 
 	/**
